@@ -1,0 +1,6 @@
+{
+  "name": "NorthLume AI Automation",
+  "description": "Premium B2B AI Automation & Operations Transformation partner helping businesses eliminate repetitive manual workflows in Excel, email, and reporting.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
