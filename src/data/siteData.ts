@@ -134,11 +134,11 @@ export const automationCapabilities: AutomationCapability[] = [
     examples: [
       'Automated report collection from branches/vendors',
       'Intelligent email triage & priority tagging',
-      'Attachment extraction (PDF, Excel, CSV, XML)',
+      'Attachment extraction (PDF, Excel, CSV, XML) or tables in the email body',
       'Automated stakeholder notifications & receipt alerts',
       'Exception escalation to designated team leads'
     ],
-    workflowSnippet: 'Inbox Monitor ➔ Attachment Extractor ➔ Data Normalizer ➔ Dispatcher',
+    workflowSnippet: 'Inbox Monitor ➔ Attachment / Body-table Extractor ➔ Data Normalizer ➔ Insight Engine ➔ Dispatcher',
     iconName: 'Mail',
     metric: 'Zero inbox backlog'
   },

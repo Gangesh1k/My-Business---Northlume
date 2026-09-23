@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { BusinessProblems } from './components/BusinessProblems';
 import { WhatWeAutomate } from './components/WhatWeAutomate';
 import { InteractiveWorkflowDemo } from './components/InteractiveWorkflowDemo';
+import { CapabilityDemos, DEMOS, DemoId } from './components/CapabilityDemos';
+import { ClientOnboarding } from './components/ClientOnboarding';
 import { Solutions } from './components/Solutions';
 import { BeforeVsAfter } from './components/BeforeVsAfter';
 import { UseCases } from './components/UseCases';
@@ -22,6 +24,23 @@ export default function App() {
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
   const [isDeployGuideOpen, setIsDeployGuideOpen] = useState(false);
   const [consultationTopic, setConsultationTopic] = useState('');
+  const [activeDemo, setActiveDemo] = useState<DemoId>('email-automation');
+
+  // "Try demo" on a capability card → open that demo tab and scroll to it
+  const openDemo = (id: string) => {
+    if (DEMOS.some(d => d.id === id)) setActiveDemo(id as DemoId);
+    requestAnimationFrame(() => document.getElementById('capability-demos')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  };
+  // deep links such as northlume.vercel.app/#demo-excel-automation
+  useEffect(() => {
+    const fromHash = () => {
+      const m = window.location.hash.match(/^#demo-(.+)$/);
+      if (m) openDemo(m[1]);
+    };
+    fromHash();
+    window.addEventListener('hashchange', fromHash);
+    return () => window.removeEventListener('hashchange', fromHash);
+  }, []);
 
   const handleOpenConsultation = (topic = '') => {
     setConsultationTopic(topic);
@@ -69,6 +88,21 @@ export default function App() {
         {/* 4. What We Automate */}
         <WhatWeAutomate
           onOpenConsultation={() => handleOpenConsultation('What We Automate Inquiry')}
+          onTryDemo={openDemo}
+        />
+
+        {/* 4b. Live demo for every capability (tabs) */}
+        <CapabilityDemos
+          active={activeDemo}
+          onChange={setActiveDemo}
+          onOpenConsultation={handleOpenConsultation}
+        />
+
+        {/* 4c. How clients use it after go-live (access, hosting, security) */}
+        <ClientOnboarding
+          active={activeDemo}
+          onChange={setActiveDemo}
+          onOpenConsultation={handleOpenConsultation}
         />
 
         {/* 5. Interactive Workflow Demo */}

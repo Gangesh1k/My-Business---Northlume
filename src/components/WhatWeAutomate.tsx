@@ -11,14 +11,16 @@ import {
   CheckCircle2, 
   ArrowRight,
   Layers,
-  Zap
+  Zap,
+  PlayCircle
 } from 'lucide-react';
 
 interface WhatWeAutomateProps {
   onOpenConsultation: () => void;
+  onTryDemo: (capabilityId: string) => void;
 }
 
-export const WhatWeAutomate: React.FC<WhatWeAutomateProps> = ({ onOpenConsultation }) => {
+export const WhatWeAutomate: React.FC<WhatWeAutomateProps> = ({ onOpenConsultation, onTryDemo }) => {
   const [activeCapabilityId, setActiveCapabilityId] = useState<string>(automationCapabilities[0].id);
 
   const getCapabilityIcon = (iconName: string, className = "w-5 h-5") => {
@@ -108,10 +110,19 @@ export const WhatWeAutomate: React.FC<WhatWeAutomateProps> = ({ onOpenConsultati
 
                 {/* Workflow Architecture Pill */}
                 <div className="mt-5 pt-3 border-t border-dashed border-slate-200">
-                  <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 text-[11px] font-mono text-slate-600 flex items-center gap-1.5 truncate">
-                    <span className="font-semibold text-slate-900">Flow:</span>
-                    <span className="truncate text-teal-800 font-medium">{capability.workflowSnippet}</span>
+                  <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 text-[11px] font-mono text-slate-600 leading-relaxed">
+                    <span className="font-semibold text-slate-900">Flow: </span>
+                    <span className="text-teal-800 font-medium">{capability.workflowSnippet}</span>
                   </div>
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); onTryDemo(capability.id); }}
+                    className="mt-3 w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition-colors"
+                    aria-label={`Try the ${capability.title} demo`}
+                  >
+                    <PlayCircle className="w-3.5 h-3.5" />
+                    <span>Try demo</span>
+                  </button>
                 </div>
               </div>
             );

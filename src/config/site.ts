@@ -56,7 +56,7 @@ export const siteConfig: SiteConfig = {
   navLinks: [
     { name: "Services", href: "#solutions" },
     { name: "Capabilities", href: "#what-we-automate" },
-    { name: "Live Demo", href: "#demo" },
+    { name: "Live Demo", href: "#capability-demos" },
     { name: "Before & After", href: "#before-after" },
     { name: "Use Cases", href: "#use-cases" },
     { name: "Process", href: "#how-it-works" },
