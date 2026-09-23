@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { siteConfig } from '../config/site';
-import { NorthLumeMark } from './Logo';
+import { NorthLumeMark, NorthLumeWordmark } from './Logo';
 import { Menu, X, ArrowUpRight, Sparkles, ChevronRight } from 'lucide-react';
 
 interface NavbarProps {
@@ -62,9 +62,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation, onOpenDeploy
             </div>
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
-                <span className="text-xl font-bold tracking-tight text-slate-900 font-sans">
-                  {siteConfig.name}
-                </span>
+                <NorthLumeWordmark className="text-xl" />
                 <span className="hidden xl:inline-flex items-center px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase bg-teal-50 text-teal-700 border border-teal-200/60 rounded-full">
                   Automation
                 </span>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { siteConfig } from '../config/site';
-import { NorthLumeMark } from './Logo';
+import { NorthLumeMark, NorthLumeWordmark } from './Logo';
 import { Zap, ArrowUp, ArrowUpRight, Mail, Sparkles } from 'lucide-react';
 
 interface FooterProps {
@@ -21,9 +21,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenConsultation, onOpenDeploy
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-2.5">
               <NorthLumeMark className="w-8 h-8 rounded-lg shadow-2xs" />
-              <span className="font-bold text-xl tracking-tight text-white">
-                {siteConfig.name}
-              </span>
+              <NorthLumeWordmark className="text-xl" dark />
             </div>
 
             <p className="text-xs sm:text-sm text-slate-400 font-mono leading-relaxed max-w-sm">
