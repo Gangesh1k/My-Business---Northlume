@@ -160,7 +160,7 @@ export const ExcelDemo: React.FC<{ onOpenConsultation: () => void }> = ({ onOpen
     setBusy(false);
   };
 
-  const download = () => res && downloadXlsx('NorthLume_Consolidated_Master.xlsx', [
+  const download = () => res && downloadXlsx('NorthLumeAI_Consolidated_Master.xlsx', [
     { name: 'Master', header: [...FIELDS, 'Branch', 'Source file', 'Check'], rows: res.master.map(m => [m['Invoice No'], m.Customer, m['Invoice Date'], m.Amount, m.Status, m.Branch, m.Source, m.Check]) },
     { name: 'Exceptions', header: ['Invoice No', 'Branch', 'Issue'], rows: [...res.invalid.map(m => [m['Invoice No'], m.Branch, m.Check]), ...(res.recon?.missingBranch.map(k => [k, 'ERP only', 'In ERP but missing from branch files']) ?? [])] },
     { name: 'Header mapping', header: ['File', 'Original column', 'Mapped to'], rows: res.mapping.map(m => [m.file, m.source, m.field ?? '(kept, not mapped)']) },

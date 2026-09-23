@@ -53,7 +53,7 @@ const PLANS: Record<DemoId, Plan> = {
 };
 
 const HOSTING = [
-  { icon: Cloud, title: 'Managed by NorthLume', text: 'We host, monitor and maintain everything. Fastest start — you only share the access listed above.', tag: 'Most popular' },
+  { icon: Cloud, title: 'Managed by NorthLume AI', text: 'We host, monitor and maintain everything. Fastest start — you only share the access listed above.', tag: 'Most popular' },
   { icon: Server, title: 'In your cloud', text: 'Deployed inside your Azure, AWS or Google Cloud account. Your IT owns the environment; we build and support.', tag: 'For IT-led teams' },
   { icon: Laptop, title: 'On your own server or PC', text: 'Runs on a Windows / Mac machine in your office. Data never leaves your network.', tag: 'For sensitive data' },
 ];
@@ -79,7 +79,7 @@ export const ClientOnboarding: React.FC<Props> = ({ active, onChange, onOpenCons
   const plan = PLANS[active];
   const cur = DEMOS.find(d => d.id === active)!;
 
-  const checklist = () => downloadXlsx(`NorthLume_Onboarding_Checklist_${cur.label.replace(/\s+/g, '_')}.xlsx`, [
+  const checklist = () => downloadXlsx(`NorthLumeAI_Onboarding_Checklist_${cur.label.replace(/\s+/g, '_')}.xlsx`, [
     { name: 'Access checklist', header: ['#', 'Item', 'Type', 'Owner (client)', 'Status', 'Notes'],
       rows: [
         ...plan.access.map((a, i) => [i + 1, a, 'Access to grant', '', 'Pending', '']),

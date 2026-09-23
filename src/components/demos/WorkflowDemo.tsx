@@ -137,7 +137,7 @@ export const WorkflowDemo: React.FC<{ onOpenConsultation: () => void }> = ({ onO
                 {byTeam.map(b => <div key={b.t} className="rounded-xl border border-slate-200 px-3 py-2 text-xs"><div className="font-semibold text-slate-800">{b.t}</div><div className="text-slate-500">{b.n} disputes · {inr(b.v)}</div></div>)}
               </div></div>
             <div className="flex flex-wrap gap-3">
-              <SmallButton tone="teal" icon={Download} onClick={() => downloadXlsx('NorthLume_Dispute_Tracker.xlsx', [{ name: 'Dispute tracker', header: ['Dispute', 'Customer', 'Invoice', 'Amount', 'Reason', 'Team', 'Next action', 'Priority', 'SLA (h)', 'Escalated', 'Account owner', 'Dispute text'],
+              <SmallButton tone="teal" icon={Download} onClick={() => downloadXlsx('NorthLumeAI_Dispute_Tracker.xlsx', [{ name: 'Dispute tracker', header: ['Dispute', 'Customer', 'Invoice', 'Amount', 'Reason', 'Team', 'Next action', 'Priority', 'SLA (h)', 'Escalated', 'Account owner', 'Dispute text'],
                 rows: out.map(r => [r.id, r.customer, r.invoice, r.amount, r.reason, r.team, r.action, r.priority, r.slaH, r.escalate ? 'Yes' : 'No', r.owner, r.text]) }])}>Download tracker</SmallButton>
               <SmallButton tone="dark" onClick={onOpenConsultation}>Automate my workflow <ArrowRight className="w-4 h-4 text-teal-400" /></SmallButton>
             </div>

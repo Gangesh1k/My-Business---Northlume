@@ -20,7 +20,7 @@ export const NorthLumeMark: React.FC<{ className?: string; size?: number | strin
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       style={size ? { width: size, height: size } : undefined}
-      aria-label="NorthLume logo"
+      aria-label="NorthLume AI logo"
     >
       <defs>
         <linearGradient id="northlumeGradient" x1="160" y1="64" x2="448" y2="448" gradientUnits="userSpaceOnUse">
@@ -51,7 +51,7 @@ export const NorthLumeLogo: React.FC<LogoProps> = ({
   size,
   withText = true,
   textColor = "text-slate-900",
-  badgeText = "AI Operations"
+  badgeText = "Automation"
 }) => {
   return (
     <div className={`inline-flex items-center gap-2.5 ${className}`}>
@@ -59,7 +59,7 @@ export const NorthLumeLogo: React.FC<LogoProps> = ({
       {withText && (
         <div className="flex items-center gap-2">
           <span className={`text-xl font-bold tracking-tight ${textColor} font-sans`}>
-            NorthLume
+            NorthLume AI
           </span>
           {badgeText && (
             <span className="hidden sm:inline-block px-2.5 py-0.5 text-[10px] font-bold tracking-wider uppercase bg-teal-50 text-teal-700 border border-teal-100 rounded-full">

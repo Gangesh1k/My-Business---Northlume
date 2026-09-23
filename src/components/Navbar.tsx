@@ -55,7 +55,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation, onOpenDeploy
             href="#"
             className="flex items-center gap-3 group transition-transform hover:opacity-95 shrink-0"
             id="nav-logo"
-            aria-label="NorthLume Home"
+            aria-label="NorthLume AI Home"
           >
             <div className="relative">
               <NorthLumeMark className="w-8 h-8 rounded-xl shadow-xs transition-transform group-hover:scale-105" />
@@ -66,11 +66,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation, onOpenDeploy
                   {siteConfig.name}
                 </span>
                 <span className="hidden xl:inline-flex items-center px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase bg-teal-50 text-teal-700 border border-teal-200/60 rounded-full">
-                  AI Operations
+                  Automation
                 </span>
               </div>
               <span className="hidden 2xl:block text-[10px] font-medium text-slate-500 -mt-0.5">
-                Enterprise Six Sigma Workflows
+                AI Automation &amp; Operations
               </span>
             </div>
           </a>

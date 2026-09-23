@@ -133,7 +133,7 @@ export const EmailAutomationLab: React.FC<Props> = ({ onOpenConsultation, embedd
     const head = (cols: string[]) => cols.map(c => ({ value: c, fontWeight: 'bold' as const, backgroundColor: '#11141A', color: '#FFFFFF' }));
     const a = result.analyses[0], t = result.tables[0];
     const cell = (v: Cell) => (v instanceof Date ? { value: v, format: 'dd-mmm-yyyy', type: Date } : v ?? '');
-    const fileName = `NorthLume_insights_${result.email.subject.replace(/[^A-Za-z0-9]+/g, '_').slice(0, 40)}.xlsx`;
+    const fileName = `NorthLumeAI_insights_${result.email.subject.replace(/[^A-Za-z0-9]+/g, '_').slice(0, 40)}.xlsx`;
     await writeXlsxFile([
       { sheet: 'Insights', data: [head(['Severity', 'Insight', 'Detail']), ...result.analyses.flatMap(x => x.insights.map(i => [i.severity.toUpperCase(), i.title, i.detail]))], columns: [{ width: 12 }, { width: 50 }, { width: 90 }] },
       { sheet: 'KPIs', data: [head(['Metric', 'Total', 'Average', 'Min', 'Max']), ...a.kpis.map(k => [k.metric, k.total, +k.average.toFixed(2), k.min, k.max])], columns: [{ width: 28 }, { width: 14 }, { width: 14 }, { width: 14 }, { width: 14 }] },

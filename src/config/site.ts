@@ -23,8 +23,8 @@ export interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  name: "NorthLume",
-  shortName: "NorthLume",
+  name: "NorthLume AI",
+  shortName: "NorthLume AI",
   tagline: "AI Automation & Operations Transformation",
   positioning: "AI Automation for Businesses That Still Run on Email, Excel & Manual Processes",
   corePromise: "We identify repetitive operational work and turn it into intelligent, automated workflows that save time, reduce errors and improve business visibility.",
@@ -50,7 +50,7 @@ export const siteConfig: SiteConfig = {
     bio: "Deep enterprise operations background driving high-yield process transformation, Lean Six Sigma methodologies, and practical AI execution for mission-critical business workflows."
   },
   contact: {
-    email: "gangesh1k@gmail.com",
+    email: "gangesh@northlumeai.com",
     linkedIn: "https://www.linkedin.com/in/gangesh-kumar-d-10268b56/",
   },
   navLinks: [

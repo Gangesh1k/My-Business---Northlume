@@ -225,7 +225,7 @@ export const AgentsDemo: React.FC<{ onOpenConsultation: () => void }> = ({ onOpe
                 </div></div>
             )}
             <div className="flex flex-wrap gap-3">
-              <SmallButton tone="teal" icon={Download} onClick={() => downloadXlsx(`NorthLume_${agent.name.replace(/\s+/g, '_')}.xlsx`, [output.sheet, { name: 'Drafts', header: ['To', 'Subject', 'Body'], rows: output.drafts.map(d => [d.to, d.subject, d.body]) }])}>Download results</SmallButton>
+              <SmallButton tone="teal" icon={Download} onClick={() => downloadXlsx(`NorthLumeAI_${agent.name.replace(/\s+/g, '_')}.xlsx`, [output.sheet, { name: 'Drafts', header: ['To', 'Subject', 'Body'], rows: output.drafts.map(d => [d.to, d.subject, d.body]) }])}>Download results</SmallButton>
               <SmallButton tone="dark" onClick={onOpenConsultation}>Build an agent for my team <ArrowRight className="w-4 h-4 text-teal-400" /></SmallButton>
             </div>
           </Card>

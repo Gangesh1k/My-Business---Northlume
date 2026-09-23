@@ -106,7 +106,7 @@ export const ReportingDemo: React.FC<{ onOpenConsultation: () => void }> = ({ on
     w.document.write(`<html><head><base href="${location.origin}/"><title>${K.label}</title>${css}</head><body style="padding:32px">${el.outerHTML}</body></html>`);
     w.document.close(); setTimeout(() => w.print(), 700);
   };
-  const excel = () => downloadXlsx(`NorthLume_${K.label.replace(/\s+/g, '_')}.xlsx`, [
+  const excel = () => downloadXlsx(`NorthLumeAI_${K.label.replace(/\s+/g, '_')}.xlsx`, [
     { name: 'Scorecard', header: ['Team', 'Received', 'Processed', 'Backlog', 'SLA %', 'AHT (min)', 'Accuracy %', 'Items / person / day'],
       rows: report.teams.map(t => [t.team, t.now.received, t.now.processed, t.now.backlog, +t.now.sla.toFixed(1), +t.now.aht.toFixed(2), +t.now.accuracy.toFixed(2), +t.now.productivity.toFixed(1)]) },
     { name: 'Call-outs', header: ['Severity', 'Call-out', 'Detail'], rows: report.callouts.map(c => [c.severity, c.title, c.detail]) },
@@ -139,7 +139,7 @@ export const ReportingDemo: React.FC<{ onOpenConsultation: () => void }> = ({ on
           <Card className="shadow-xl space-y-5">
             <div id="nl-report" className="space-y-5">
               <div className="flex flex-wrap items-end justify-between gap-2 border-b border-slate-200 pb-3">
-                <div><div className="text-[11px] font-mono uppercase tracking-wider text-teal-700">NorthLume · automated report</div>
+                <div><div className="text-[11px] font-mono uppercase tracking-wider text-teal-700">NorthLume AI · automated report</div>
                   <div className="text-xl font-extrabold text-slate-900">{K.label}</div></div>
                 <div className="text-xs text-slate-500">Period: <b className="text-slate-800">{report.period}</b> · vs previous period</div>
               </div>
