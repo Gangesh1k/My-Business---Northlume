@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { siteConfig } from '../config/site';
+import { saveLead } from '../lib/leads';
 import { 
   X, 
   Send, 
@@ -40,6 +41,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitted(true);
+    saveLead(initialTopic?.toLowerCase().includes('pilot') ? 'pilot' : initialTopic?.toLowerCase().includes('score') ? 'scorecard' : 'consultation', { name, email, company, message: [initialTopic, message].filter(Boolean).join(' — ') });
 
     const subject = encodeURIComponent(`Consultation Booking: ${company || name || 'Operations Automation'}`);
     const body = encodeURIComponent(

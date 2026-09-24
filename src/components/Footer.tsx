@@ -181,7 +181,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenConsultation, onOpenDeploy
 
         {/* Bottom Bar: Copyright & Back to Top */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>© 2026 {siteConfig.name}. All rights reserved.</p>
+          <p>© 2026 {siteConfig.name}. All rights reserved. · <a href="#privacy" className="hover:text-white underline">Privacy notice</a></p>
 
           <div className="flex items-center gap-4">
             <span className="font-mono text-[11px]">

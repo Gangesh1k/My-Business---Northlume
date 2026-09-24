@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Bot, Scale, MessagesSquare, ShieldCheck, Play, Brain, Wrench, Eye, CheckCircle2, ArrowRight, Download, Mail } from 'lucide-react';
+import { track } from '../../lib/track';
 import { Card, downloadXlsx, inr, Kpis, Label, MiniTable, Note, PrimaryButton, sleep, SmallButton } from './kit';
 
 type Ev = { kind: 'thought' | 'tool' | 'obs' | 'done'; text: string };
@@ -168,6 +169,7 @@ export const AgentsDemo: React.FC<{ onOpenConsultation: () => void }> = ({ onOpe
   const logRef = useRef<HTMLDivElement>(null);
 
   const run = async () => {
+    track('demo_run', 'ai-agents');
     setBusy(true); setEvents([]); setOutput(null);
     const r = agent.run();
     for (const e of r.events) {

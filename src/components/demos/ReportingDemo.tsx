@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { AlarmClock, Database, Calculator, FileBarChart2, Send, Download, Printer, ArrowRight, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { track } from '../../lib/track';
 import { Card, downloadXlsx, InsightList, Label, LineChart, MiniTable, Note, num, PrimaryButton, Severity, SmallButton, Stepper, useStages } from './kit';
 
 // ---------------- sample operations data: 4 teams × 35 days from 3 systems
@@ -79,6 +80,7 @@ export const ReportingDemo: React.FC<{ onOpenConsultation: () => void }> = ({ on
   }, [kind]);
 
   const run = async () => {
+    track('demo_run', 'reporting-automation');
     setBusy(true); setDone(null); reset();
     const cur = periodRows(K.days);
     await step(0, `Schedule fired: ${K.when}`, () => `${K.label} · period ${report.period}`, 500);

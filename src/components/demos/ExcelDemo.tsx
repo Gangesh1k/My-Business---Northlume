@@ -1,5 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { Files, Columns3, Eraser, GitCompareArrows, FileCheck2, FileSpreadsheet, Download, Upload, ArrowRight, RotateCcw } from 'lucide-react';
+import { useAccess } from '../../auth/AccessProvider';
+import { TrialBadge } from '../../auth/TrialBadge';
+import { track } from '../../lib/track';
 import { normalize, Cell } from '../../lib/emailInsights';
 import { Card, downloadXlsx, inr, InsightList, Kpis, Label, MiniTable, Note, PrimaryButton, readGrid, SmallButton, Stepper, useStages } from './kit';
 
@@ -68,6 +71,7 @@ function mapHeaders(cols: string[]) {
 }
 
 export const ExcelDemo: React.FC<{ onOpenConsultation: () => void }> = ({ onOpenConsultation }) => {
+  const { requestRun } = useAccess();
   const [files, setFiles] = useState<SrcFile[]>(SAMPLE.files);
   const [useLedger, setUseLedger] = useState(true);
   const [busy, setBusy] = useState(false);
@@ -98,6 +102,8 @@ export const ExcelDemo: React.FC<{ onOpenConsultation: () => void }> = ({ onOpen
   };
 
   const run = async () => {
+    if (isSample) track('demo_run', 'excel-automation');
+    else if (!(await requestRun('excel-automation', { files: files.length }))) return;
     setBusy(true); setRes(null); reset(); setErr('');
     try {
       const tables = files.map(f => ({ f, t: normalize(f.grid, f.name, 'attachment') }));
@@ -195,6 +201,7 @@ export const ExcelDemo: React.FC<{ onOpenConsultation: () => void }> = ({ onOpen
             {!isSample && <SmallButton icon={RotateCcw} onClick={() => { setFiles(SAMPLE.files); setUseLedger(true); setRes(null); reset(); }} className="!text-xs !py-2">Samples</SmallButton>}
           </div>
           <input ref={inputRef} type="file" multiple accept=".xlsx,.xlsm,.csv,.tsv" className="hidden" onChange={e => onUpload(e.target.files)} />
+          <TrialBadge tool="excel-automation" />
           <Note>Upload 2–6 Excel/CSV files with similar data but different column names. They are processed only in your browser.</Note>
         </Card>
         <PrimaryButton busy={busy} icon={Files} onClick={run}>{busy ? 'Consolidating…' : 'Consolidate & reconcile'}</PrimaryButton>

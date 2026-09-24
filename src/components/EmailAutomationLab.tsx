@@ -3,6 +3,9 @@ import {
   Mail, Paperclip, FileSpreadsheet, Table2, Sparkles, Send, Inbox, Wand2, CheckCircle2, Loader2,
   Download, AlertTriangle, TrendingUp, Info, ShieldCheck, Upload, ArrowRight, RotateCcw,
 } from 'lucide-react';
+import { useAccess } from '../auth/AccessProvider';
+import { TrialBadge } from '../auth/TrialBadge';
+import { track } from '../lib/track';
 import { sampleEmails, SampleEmail } from '../data/emailSamples';
 import {
   analyze, Analysis, Cell, fmt, htmlTables, normalize, parseDelimited, Table, textTables, triage, Triage, Severity,
@@ -47,6 +50,7 @@ function extractTables(email: SampleEmail): { tables: Table[]; note: string } {
 }
 
 export const EmailAutomationLab: React.FC<Props> = ({ onOpenConsultation, embedded = false }) => {
+  const { requestRun } = useAccess();
   const [tab, setTab] = useState<'samples' | 'own'>('samples');
   const [selected, setSelected] = useState<SampleEmail>(sampleEmails[0]);
   const [stages, setStages] = useState<Stage[]>(STAGES.map(s => ({ ...s, detail: 'Waiting', state: 'idle' })));
@@ -94,6 +98,8 @@ export const EmailAutomationLab: React.FC<Props> = ({ onOpenConsultation, embedd
   const run = async () => {
     const email = tab === 'samples' ? selected : buildOwnEmail();
     if (!email) { setError('Upload a file or paste a table first (you can copy cells straight from Excel).'); return; }
+    if (tab === 'own' && !(await requestRun('email-automation', { source: ownFile ? 'file' : 'paste' }))) return;
+    if (tab === 'samples') track('demo_run', 'email-automation', selected.id);
     reset(); setRunning(true);
     setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
     try {
@@ -198,6 +204,7 @@ export const EmailAutomationLab: React.FC<Props> = ({ onOpenConsultation, embedd
                   className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-mono focus:outline-none focus:border-teal-500 resize-none" />
                 <p className="flex items-start gap-1.5 text-[11px] text-slate-500"><ShieldCheck className="w-3.5 h-3.5 text-teal-600 shrink-0 mt-px" />
                   Processed entirely in your browser — nothing is uploaded or stored.</p>
+                <TrialBadge tool="email-automation" />
               </div>
             )}
 

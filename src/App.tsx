@@ -19,12 +19,15 @@ import { LeadCTA } from './components/LeadCTA';
 import { Footer } from './components/Footer';
 import { ContactModal } from './components/ContactModal';
 import { VercelGuideModal } from './components/VercelGuideModal';
+import { AdminDashboard } from './auth/AdminDashboard';
+import { PrivacyNotice } from './components/PrivacyNotice';
 
 export default function App() {
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
   const [isDeployGuideOpen, setIsDeployGuideOpen] = useState(false);
   const [consultationTopic, setConsultationTopic] = useState('');
   const [activeDemo, setActiveDemo] = useState<DemoId>('email-automation');
+  const [overlay, setOverlay] = useState<'admin' | 'privacy' | null>(null);
 
   // "Try demo" on a capability card → open that demo tab and scroll to it
   const openDemo = (id: string) => {
@@ -34,8 +37,10 @@ export default function App() {
   // deep links such as northlume.vercel.app/#demo-excel-automation
   useEffect(() => {
     const fromHash = () => {
-      const m = window.location.hash.match(/^#demo-(.+)$/);
+      const h = window.location.hash;
+      const m = h.match(/^#demo-(.+)$/);
       if (m) openDemo(m[1]);
+      setOverlay(h === '#admin' ? 'admin' : h === '#privacy' ? 'privacy' : null);
     };
     fromHash();
     window.addEventListener('hashchange', fromHash);
@@ -173,6 +178,11 @@ export default function App() {
         isOpen={isDeployGuideOpen}
         onClose={() => setIsDeployGuideOpen(false)}
       />
+
+      {overlay && (() => {
+        const close = () => { history.replaceState(null, '', window.location.pathname + window.location.search); setOverlay(null); };
+        return overlay === 'admin' ? <AdminDashboard onClose={close} /> : <PrivacyNotice onClose={close} />;
+      })()}
     </div>
   );
 }

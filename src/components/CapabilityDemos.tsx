@@ -1,4 +1,7 @@
 import React from 'react';
+import { ReportingTool } from './tools/ReportingTool';
+import { WorkflowTool } from './tools/WorkflowTool';
+import { ReconTool } from './tools/ReconTool';
 import { Mail, FileSpreadsheet, BarChart3, Sparkles, Share2, Bot, PlayCircle } from 'lucide-react';
 import { EmailAutomationLab } from './EmailAutomationLab';
 import { ExcelDemo } from './demos/ExcelDemo';
@@ -19,8 +22,17 @@ export type DemoId = typeof DEMOS[number]['id'];
 
 interface Props { active: DemoId; onChange: (id: DemoId) => void; onOpenConsultation: (topic: string) => void }
 
+const OWN_TOOLS: Partial<Record<string, { label: string; C: React.FC }>> = {
+  'reporting-automation': { label: 'Build a report from my file', C: ReportingTool },
+  'workflow-automation': { label: 'Route my own tickets', C: WorkflowTool },
+  'ai-agents': { label: 'Reconcile my bank statement', C: ReconTool },
+};
+
 export const CapabilityDemos: React.FC<Props> = ({ active, onChange, onOpenConsultation }) => {
   const cur = DEMOS.find(d => d.id === active)!;
+  const [mode, setMode] = React.useState<'sample' | 'own'>('sample');
+  React.useEffect(() => setMode('sample'), [active]);
+  const own = OWN_TOOLS[active];
   const consult = () => onOpenConsultation(`${cur.label} — live demo follow-up`);
   return (
     <section id="capability-demos" className="py-20 md:py-28 bg-white border-y border-slate-200 relative scroll-mt-16">
@@ -49,6 +61,17 @@ export const CapabilityDemos: React.FC<Props> = ({ active, onChange, onOpenConsu
           <a href="#go-live" className="font-semibold text-teal-700 hover:text-teal-600 whitespace-nowrap">How clients use this after go-live →</a>
         </p>
 
+        {own && (
+          <div className="flex justify-center mb-6">
+            <div className="inline-flex p-1 rounded-full bg-slate-100 border border-slate-200 text-sm font-semibold">
+              {([['sample', 'Sample demo'], ['own', own.label]] as const).map(([k, l]) => (
+                <button key={k} onClick={() => setMode(k)} aria-pressed={mode === k}
+                  className={`px-4 py-1.5 rounded-full transition-all ${mode === k ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800'}`}>{l}</button>
+              ))}
+            </div>
+          </div>
+        )}
+        {own && mode === 'own' ? <div key={active + '-own'} className="animate-in fade-in duration-300"><own.C /></div> :
         <div key={active} className="animate-in fade-in duration-300">
           {active === 'email-automation' && <EmailAutomationLab embedded onOpenConsultation={consult} />}
           {active === 'excel-automation' && <ExcelDemo onOpenConsultation={consult} />}
@@ -56,7 +79,7 @@ export const CapabilityDemos: React.FC<Props> = ({ active, onChange, onOpenConsu
           {active === 'ai-business-insights' && <InsightsDemo onOpenConsultation={consult} />}
           {active === 'workflow-automation' && <WorkflowDemo onOpenConsultation={consult} />}
           {active === 'ai-agents' && <AgentsDemo onOpenConsultation={consult} />}
-        </div>
+        </div>}
       </div>
     </section>
   );

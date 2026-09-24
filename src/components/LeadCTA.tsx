@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { siteConfig } from '../config/site';
+import { saveLead } from '../lib/leads';
 import { 
   Mail, 
   Send, 
@@ -30,6 +31,7 @@ export const LeadCTA: React.FC<LeadCTAProps> = ({ initialNotes = '', onOpenConsu
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitted(true);
+    saveLead('lead_form', { name, email, company, message: notes });
 
     // Formulate a pre-filled mailto fallback link
     const subject = encodeURIComponent(`AI Automation Assessment Request: ${company || name || 'Operations Inquiry'}`);

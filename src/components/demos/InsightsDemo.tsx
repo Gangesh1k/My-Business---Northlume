@@ -1,5 +1,8 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { Sparkles, Send, Upload, RotateCcw, ArrowRight, MessageSquareText, Bot } from 'lucide-react';
+import { useAccess } from '../../auth/AccessProvider';
+import { TrialBadge } from '../../auth/TrialBadge';
+import { track } from '../../lib/track';
 import { normalize, Table, Row } from '../../lib/emailInsights';
 import { Bars, Card, InsightList, Label, LineChart, MiniTable, Note, readGrid, Severity, SmallButton } from './kit';
 
@@ -185,6 +188,7 @@ const SUGGESTED = ['Why did revenue drop last month?', 'Which region missed targ
   'Where is discount leakage highest?', 'Any anomalies?', 'Compare North vs South', 'Why did West fall?'];
 
 export const InsightsDemo: React.FC<{ onOpenConsultation: () => void }> = ({ onOpenConsultation }) => {
+  const { requestRun } = useAccess();
   const [table, setTable] = useState<Table>(SAMPLE);
   const [q, setQ] = useState('');
   const [thread, setThread] = useState<Answer[]>([]);
@@ -198,13 +202,14 @@ export const InsightsDemo: React.FC<{ onOpenConsultation: () => void }> = ({ onO
 
   const submit = async (text: string) => {
     if (!text.trim() || thinking) return;
+    if (isSample && !thread.length) track('demo_run', 'ai-business-insights');
     setQ(''); setThinking(true); await new Promise(r => setTimeout(r, 650));
     try { setThread(t => [...t, ask(text, table)]); } catch { setThread(t => [...t, { q: text, text: "I couldn't answer that from this data. Try naming a column, e.g. “total Revenue by Region”." }]); }
     setThinking(false); setTimeout(() => endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
   };
   const onFile = async (f?: File) => {
     if (!f) return; setErr('');
-    try { const g = await readGrid(f); const t = normalize(g.grid, g.name, 'upload'); if (!t) throw new Error('No table found in that file.'); setTable(t); setThread([]); }
+    try { const g = await readGrid(f); const t = normalize(g.grid, g.name, 'upload'); if (!t) throw new Error('No table found in that file.'); if (!(await requestRun('ai-business-insights', { rows: t.rows.length }))) return; setTable(t); setThread([]); }
     catch (e) { setErr((e as Error).message); }
   };
 
@@ -223,6 +228,7 @@ export const InsightsDemo: React.FC<{ onOpenConsultation: () => void }> = ({ onO
           </div>
           <input ref={fileRef} type="file" accept=".xlsx,.xlsm,.csv,.tsv" className="hidden" onChange={e => onFile(e.target.files?.[0])} />
           {err && <p className="text-xs text-red-600">{err}</p>}
+          <TrialBadge tool="ai-business-insights" />
           <Note>Sample: monthly sales by region and product line (revenue, target, cost, discounts, returns). Your file stays in your browser.</Note>
         </Card>
       </div>

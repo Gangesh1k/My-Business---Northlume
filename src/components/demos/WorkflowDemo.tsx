@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Webhook, Search, Tags, GitBranch, RefreshCw, BellRing, ArrowRight, Download, ScrollText } from 'lucide-react';
+import { track } from '../../lib/track';
 import { Card, downloadXlsx, inr, Kpis, Label, MiniTable, Note, PrimaryButton, sleep, SmallButton, Stepper, useStages } from './kit';
 
 // ---------------- sample: disputes raised by customers in the CRM
@@ -59,6 +60,7 @@ export const WorkflowDemo: React.FC<{ onOpenConsultation: () => void }> = ({ onO
   };
 
   const run = async () => {
+    track('demo_run', 'workflow-automation');
     setBusy(true); setOut(null); setLog([]); reset();
     const add = (s: string) => setLog(l => [...l, `${new Date().toLocaleTimeString('en-IN', { hour12: false })}  ${s}`]);
     await step(0, 'Listening for new disputes…', () => `${DISPUTES.length} new dispute tickets received from CRM`, 500);
