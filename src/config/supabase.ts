@@ -6,5 +6,5 @@
 //  by the row-level-security rules in supabase/schema.sql.  NEVER paste the service_role / Secret key here.
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const SUPABASE_URL = 'PASTE_PROJECT_URL_HERE';          // looks like  https://abcdefgh.supabase.co
-export const SUPABASE_PUBLISHABLE_KEY = 'PASTE_PUBLISHABLE_KEY_HERE';  // starts with sb_publishable_  (or eyJ… for the older anon key)
+export const SUPABASE_URL = 'https://bxktwvntdgqerzlxypvo.supabase.co';          // looks like  https://abcdefgh.supabase.co
+export const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_rrE_nihqTQYaJg5L4NWZqQ_4O8spfz1';  // starts with sb_publishable_  (or eyJ… for the older anon key)
