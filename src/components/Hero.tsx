@@ -20,12 +20,12 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ onOpenScorecard, onOpenConsultation }) => {
   return (
-    <section id="hero" className="relative pt-28 pb-16 md:pt-36 md:pb-24 overflow-hidden bg-slate-50">
+    <section id="hero" className="relative pt-24 pb-10 md:pt-28 md:pb-14 overflow-hidden bg-slate-50">
       {/* Background ambient accents */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-teal-100/30 rounded-full blur-3xl pointer-events-none -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center max-w-4xl mx-auto space-y-6">
+        <div className="text-center max-w-4xl mx-auto space-y-5">
           {/* Eyebrow badge / credibility tag */}
           <div className="inline-flex items-center gap-2 bg-teal-50 text-teal-700 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border border-teal-100 shadow-2xs">
             <span className="w-1.5 h-1.5 bg-teal-500 rounded-full animate-pulse"></span>
@@ -76,7 +76,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenScorecard, onOpenConsultation 
         </div>
 
         {/* Hero Interactive Workflow Visual */}
-        <div className="mt-12 lg:mt-16">
+        <div className="mt-8 lg:mt-10">
           <HeroWorkflowVisual />
         </div>
       </div>

@@ -30,7 +30,7 @@ export const LoginModal: React.FC<Props> = ({ toolLabel, onClose, onDone }) => {
 
   const verify = async (e: React.FormEvent) => {
     e.preventDefault(); setErr('');
-    if (!/^\d{6}$/.test(code.trim())) { setErr('Enter the 6-digit code from the email.'); return; }
+    if (!/^\d{6,8}$/.test(code.trim())) { setErr('Enter the code from the email (6–8 digits).'); return; }
     setBusy(true);
     const { data, error } = await supabase!.auth.verifyOtp({ email: email.trim().toLowerCase(), token: code.trim(), type: 'email' });
     if (error || !data.session) { setBusy(false); setErr('That code is not valid or has expired. Request a new one.'); return; }
@@ -71,8 +71,8 @@ export const LoginModal: React.FC<Props> = ({ toolLabel, onClose, onDone }) => {
           <form onSubmit={verify} className="space-y-3">
             <button type="button" onClick={() => { setStep('email'); setCode(''); setErr(''); }} className="inline-flex items-center gap-1 text-xs text-slate-500 hover:text-slate-800"><ArrowLeft className="w-3.5 h-3.5" /> Change email</button>
             <h3 className="text-xl font-extrabold text-slate-900">Check your inbox</h3>
-            <p className="text-sm text-slate-600">We sent a 6-digit code to <b>{email}</b>. It expires in 1 hour. Check spam if you don't see it.</p>
-            <input className={`${input} text-center text-2xl tracking-[0.5em] font-mono`} inputMode="numeric" maxLength={6} placeholder="••••••" value={code}
+            <p className="text-sm text-slate-600">We sent a sign-in code to <b>{email}</b>. It expires in 1 hour. Check spam if you don't see it.</p>
+            <input className={`${input} text-center text-2xl tracking-[0.5em] font-mono`} inputMode="numeric" maxLength={8} placeholder="Code" value={code}
               onChange={e => setCode(e.target.value.replace(/\D/g, ''))} autoFocus />
             {err && <p className="text-xs text-red-600">{err}</p>}
             <button disabled={busy} className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-full bg-teal-600 hover:bg-teal-500 text-white text-sm font-semibold disabled:opacity-60">

@@ -20,10 +20,10 @@ export const FAQ: React.FC<FAQProps> = ({ onOpenConsultation }) => {
   };
 
   return (
-    <section id="faq" className="py-20 md:py-28 bg-slate-50 relative border-t border-slate-200">
+    <section id="faq" className="py-14 md:py-20 bg-slate-50 relative border-t border-slate-200">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16 space-y-4">
+        <div className="text-center mb-10 space-y-4">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-200/80 border border-slate-300 text-slate-800 text-xs font-mono font-semibold uppercase tracking-wider">
             <HelpCircle className="w-3.5 h-3.5 text-teal-700" />
             <span>Frequently Asked Questions</span>

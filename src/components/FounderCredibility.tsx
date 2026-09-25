@@ -44,14 +44,14 @@ export const FounderCredibility: React.FC<FounderCredibilityProps> = ({ onOpenCo
   ];
 
   return (
-    <section id="about" className="py-20 md:py-28 bg-slate-900 text-white relative overflow-hidden border-t border-slate-800">
+    <section id="about" className="py-14 md:py-20 bg-slate-900 text-white relative overflow-hidden border-t border-slate-800">
       {/* Subtle ambient lighting */}
       <div className="absolute -top-32 -right-32 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-slate-800/40 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+        <div className="text-center max-w-3xl mx-auto mb-10 space-y-4">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-teal-500/10 border border-teal-500/30 text-teal-300 text-xs font-mono font-semibold uppercase tracking-wider">
             <Award className="w-3.5 h-3.5 text-teal-400" />
             <span>Operational Pedigree</span>

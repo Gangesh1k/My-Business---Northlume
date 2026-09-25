@@ -13,10 +13,10 @@ import {
 
 export const MiniCaseStudies: React.FC = () => {
   return (
-    <section id="case-studies" className="py-20 md:py-28 bg-white relative border-t border-slate-200">
+    <section id="case-studies" className="py-14 md:py-20 bg-white relative border-t border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+        <div className="text-center max-w-3xl mx-auto mb-10 space-y-4">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-amber-50 border border-amber-200 text-amber-900 text-xs font-mono font-semibold uppercase tracking-wider">
             <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
             <span>Illustrative Automation Scenarios</span>

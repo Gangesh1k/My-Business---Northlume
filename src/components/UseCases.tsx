@@ -34,10 +34,10 @@ export const UseCases: React.FC<UseCasesProps> = ({ onOpenConsultation }) => {
   };
 
   return (
-    <section id="use-cases" className="py-20 md:py-28 bg-slate-50 relative border-t border-slate-200">
+    <section id="use-cases" className="py-14 md:py-20 bg-slate-50 relative border-t border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 space-y-4">
+        <div className="text-center max-w-3xl mx-auto mb-10 space-y-4">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-teal-50 border border-teal-200 text-teal-800 text-xs font-mono font-semibold uppercase tracking-wider">
             <span>Functional Workflows</span>
           </div>

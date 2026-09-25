@@ -70,10 +70,10 @@ export const BusinessImpact: React.FC<BusinessImpactProps> = ({ onOpenConsultati
   ];
 
   return (
-    <section id="business-impact" className="py-20 md:py-28 bg-white relative border-t border-slate-200">
+    <section id="business-impact" className="py-14 md:py-20 bg-white relative border-t border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+        <div className="text-center max-w-3xl mx-auto mb-10 space-y-4">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-teal-50 border border-teal-200 text-teal-800 text-xs font-mono font-semibold uppercase tracking-wider">
             <span>Bottom-Line Outcomes</span>
           </div>
@@ -88,7 +88,7 @@ export const BusinessImpact: React.FC<BusinessImpactProps> = ({ onOpenConsultati
         </div>
 
         {/* 6 Impact Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
           {impacts.map((item, index) => {
             const Icon = item.icon;
             return (

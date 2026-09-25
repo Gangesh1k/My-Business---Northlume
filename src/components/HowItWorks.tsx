@@ -50,10 +50,10 @@ export const HowItWorks: React.FC<HowItWorksProps> = ({ onOpenConsultation }) =>
   ];
 
   return (
-    <section id="how-it-works" className="py-20 md:py-28 bg-slate-50 relative border-t border-slate-200">
+    <section id="how-it-works" className="py-14 md:py-20 bg-slate-50 relative border-t border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+        <div className="text-center max-w-3xl mx-auto mb-10 space-y-4">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-200/80 border border-slate-300 text-slate-800 text-xs font-mono font-semibold uppercase tracking-wider">
             <span>Implementation Framework</span>
           </div>

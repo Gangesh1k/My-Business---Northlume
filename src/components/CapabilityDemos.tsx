@@ -35,9 +35,9 @@ export const CapabilityDemos: React.FC<Props> = ({ active, onChange, onOpenConsu
   const own = OWN_TOOLS[active];
   const consult = () => onOpenConsultation(`${cur.label} — live demo follow-up`);
   return (
-    <section id="capability-demos" className="py-20 md:py-28 bg-white border-y border-slate-200 relative scroll-mt-16">
+    <section id="capability-demos" className="py-14 md:py-20 bg-white border-y border-slate-200 relative scroll-mt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-10 space-y-4">
+        <div className="text-center max-w-3xl mx-auto mb-8 space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-100 text-teal-700 text-xs font-bold uppercase tracking-wider">
             <PlayCircle className="w-3.5 h-3.5 text-teal-600" /><span>Live Capability Demos</span>
           </div>

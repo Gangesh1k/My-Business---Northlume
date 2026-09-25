@@ -32,10 +32,10 @@ export const BusinessProblems: React.FC<BusinessProblemsProps> = ({ onOpenScorec
   };
 
   return (
-    <section id="business-problems" className="py-20 md:py-28 bg-white relative border-y border-slate-200/80">
+    <section id="business-problems" className="py-14 md:py-20 bg-white relative border-y border-slate-200/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+        <div className="text-center max-w-3xl mx-auto mb-10 space-y-4">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-100 text-teal-700 text-xs font-bold uppercase tracking-wider">
             <span>The Hidden Cost of Manual Friction</span>
           </div>

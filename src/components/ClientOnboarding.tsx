@@ -102,9 +102,9 @@ export const ClientOnboarding: React.FC<Props> = ({ active, onChange, onOpenCons
   );
 
   return (
-    <section id="go-live" className="py-20 md:py-28 bg-slate-50 relative border-t border-slate-200 scroll-mt-16">
+    <section id="go-live" className="py-14 md:py-20 bg-slate-50 relative border-t border-slate-200 scroll-mt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-10 space-y-4">
+        <div className="text-center max-w-3xl mx-auto mb-8 space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-100 text-teal-700 text-xs font-bold uppercase tracking-wider">
             <Users className="w-3.5 h-3.5 text-teal-600" /><span>For Clients</span>
           </div>
