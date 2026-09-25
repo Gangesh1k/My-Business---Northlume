@@ -3,6 +3,9 @@ import { X, Sparkles, CheckCircle2, Loader2, Send } from 'lucide-react';
 import { supabase, ToolId, TOOL_LABELS } from '../lib/supabase';
 import { track } from '../lib/track';
 import { siteConfig } from '../config/site';
+import { useAccess } from './AccessProvider';
+import { CurrencyToggle } from '../components/CurrencyToggle';
+import { Currency, DEFAULT_PLANS, PricePlan, defaultCurrency, loadPlans, price } from '../lib/payments';
 
 interface Props { tool?: ToolId; email: string; userId?: string; onClose: () => void }
 
@@ -18,6 +21,12 @@ export const SubscribeModal: React.FC<Props> = ({ tool, email, userId, onClose }
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [err, setErr] = useState('');
+  const { pay } = useAccess();
+  const [currency, setCurrency] = useState<Currency>(defaultCurrency);
+  const [plans, setPlans] = useState<PricePlan[]>(DEFAULT_PLANS);
+  const [showForm, setShowForm] = useState(false);
+  React.useEffect(() => { loadPlans().then(setPlans); }, []);
+  const pp = (id: string) => plans.find(p => p.id === id);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault(); setErr('');
@@ -60,6 +69,23 @@ export const SubscribeModal: React.FC<Props> = ({ tool, email, userId, onClose }
                 </button>
               ))}
             </div>
+            {plan === 'pro' && !showForm ? (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between gap-2"><span className="text-xs font-semibold text-slate-700">Pay online and start now</span><CurrencyToggle value={currency} onChange={setCurrency} /></div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {[['pro_monthly', '/ month', 'Cancel any time'], ['pro_yearly', '/ year', 'Save 10%']].map(([id, per, note]) => (
+                    <button type="button" key={id} onClick={() => pay(id as any, currency, pp(id)?.name ?? 'Pro')}
+                      className="rounded-2xl border border-slate-200 hover:border-teal-500 p-4 text-left bg-white">
+                      <div><span className="text-xl font-extrabold text-slate-900">{price(pp(id), currency)}</span><span className="text-xs text-slate-500"> {per}</span></div>
+                      <div className="text-[11px] text-slate-500">{note}</div>
+                      <div className="mt-2 text-xs font-bold text-teal-700">Pay &amp; activate →</div>
+                    </button>
+                  ))}
+                </div>
+                <p className="text-[11px] text-slate-500">Secure checkout by Razorpay (UPI, cards, net banking; international cards in USD). Pro switches on instantly.</p>
+                <button type="button" onClick={() => setShowForm(true)} className="text-xs text-slate-600 underline">Need an invoice or bank transfer instead? Request it here</button>
+              </div>
+            ) : (<>
             <div>
               <div className="text-xs font-semibold text-slate-700 mb-1.5">Tools you're interested in</div>
               <div className="flex flex-wrap gap-1.5">
@@ -81,6 +107,7 @@ export const SubscribeModal: React.FC<Props> = ({ tool, email, userId, onClose }
               {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4 text-teal-400" />} Request {plan === 'pro' ? 'Pro' : 'Business'} subscription
             </button>
             <p className="text-[11px] text-slate-500 text-center">No payment now. We'll send pricing and an invoice; access is switched on as soon as it's confirmed.</p>
+            </>)}
           </form>
         )}
       </div>

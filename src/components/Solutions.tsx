@@ -1,13 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { solutionPackages } from '../data/siteData';
-import { SolutionPackage } from '../types';
-import { Check, ArrowRight, Sparkles, ShieldCheck } from 'lucide-react';
+import { Check, ArrowRight, ShieldCheck, Loader2, Lock, Sparkles } from 'lucide-react';
+import { useAccess } from '../auth/AccessProvider';
+import { CurrencyToggle } from './CurrencyToggle';
+import { Currency, DEFAULT_PLANS, PlanId, PricePlan, defaultCurrency, loadPlans, price } from '../lib/payments';
+
+const PLAN_FOR: Record<string, PlanId> = { starter: 'starter', business: 'business', 'intelligent-ops': 'intelligent', custom: 'custom' };
+const PRICE_NOTE: Record<string, string> = { starter: 'one-time project fee', business: 'one-time project fee', 'intelligent-ops': 'one-time project fee', custom: 'scoping deposit · adjusted in final quote' };
+
 
 interface SolutionsProps {
   onSelectPlan: (planName: string) => void;
 }
 
 export const Solutions: React.FC<SolutionsProps> = ({ onSelectPlan }) => {
+  const { pay, paying } = useAccess();
+  const [currency, setCurrency] = useState<Currency>(defaultCurrency);
+  const [plans, setPlans] = useState<PricePlan[]>(DEFAULT_PLANS);
+  useEffect(() => { loadPlans().then(setPlans); }, []);
+  const plan = (id: PlanId) => plans.find(p => p.id === id);
+  const monthly = plan('pro_monthly'), yearly = plan('pro_yearly');
   return (
     <section id="solutions" className="py-14 md:py-20 bg-slate-50 relative border-t border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -25,6 +37,8 @@ export const Solutions: React.FC<SolutionsProps> = ({ onSelectPlan }) => {
             Tailored engagement structures calibrated to your team&apos;s current operational complexity — whether you need to fix one painful spreadsheet bottleneck or overhaul cross-functional operations.
           </p>
         </div>
+
+        <div className="flex justify-center mb-6"><CurrencyToggle value={currency} onChange={setCurrency} /></div>
 
         {/* 4 Solution Packages Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -64,6 +78,12 @@ export const Solutions: React.FC<SolutionsProps> = ({ onSelectPlan }) => {
                   >
                     {pkg.tier}
                   </h3>
+
+                  {/* Price */}
+                  <div className="mb-3">
+                    <span className={`text-2xl font-extrabold tracking-tight ${isPopular ? 'text-white' : 'text-slate-900'}`}>{price(plan(PLAN_FOR[pkg.id]), currency)}</span>
+                    <span className={`block text-[11px] ${isPopular ? 'text-slate-400' : 'text-slate-500'}`}>{PRICE_NOTE[pkg.id]}</span>
+                  </div>
 
                   {/* Ideal For description */}
                   <p
@@ -114,25 +134,53 @@ export const Solutions: React.FC<SolutionsProps> = ({ onSelectPlan }) => {
                   </div>
                 </div>
 
-                {/* CTA Button */}
-                <button
-                  onClick={() => onSelectPlan(pkg.tier)}
-                  className={`w-full py-3 px-4 rounded-full text-xs font-bold transition-all flex items-center justify-center gap-2 ${
-                    isPopular
-                      ? 'bg-teal-500 hover:bg-teal-400 text-slate-950 shadow-md'
-                      : 'bg-slate-900 hover:bg-slate-800 text-white shadow-xs'
-                  }`}
-                >
-                  <span>{pkg.ctaText}</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+                {/* CTA: pay now, or talk first */}
+                <div className="space-y-2">
+                  <button
+                    onClick={() => pay(PLAN_FOR[pkg.id], currency, plan(PLAN_FOR[pkg.id])?.name ?? pkg.tier)}
+                    disabled={paying !== null}
+                    className={`w-full py-3 px-4 rounded-full text-xs font-bold transition-all flex items-center justify-center gap-2 disabled:opacity-60 ${
+                      isPopular ? 'bg-teal-500 hover:bg-teal-400 text-slate-950 shadow-md' : 'bg-slate-900 hover:bg-slate-800 text-white shadow-xs'
+                    }`}
+                  >
+                    {paying === PLAN_FOR[pkg.id] ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Lock className="w-3.5 h-3.5" />}
+                    <span>{pkg.id === 'custom' ? 'Pay deposit' : 'Pay'} {price(plan(PLAN_FOR[pkg.id]), currency)} &amp; start</span>
+                  </button>
+                  <button onClick={() => onSelectPlan(pkg.tier)}
+                    className={`w-full py-2 text-[11px] font-semibold flex items-center justify-center gap-1 ${isPopular ? 'text-slate-300 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}>
+                    {pkg.ctaText.replace('Explore', 'Or book a free call —').replace('Talk to Us', 'Or talk to us first').replace('Discuss Your Requirement', 'Or discuss your requirement')}
+                    <ArrowRight className="w-3 h-3" />
+                  </button>
+                </div>
               </div>
             );
           })}
         </div>
 
+        {/* Self-serve website plan */}
+        <div className="mt-8 rounded-3xl border border-teal-200 bg-gradient-to-r from-teal-50 to-white p-5 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+          <div className="lg:col-span-5">
+            <div className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold uppercase tracking-wider text-teal-700"><Sparkles className="w-3.5 h-3.5" /> Self-serve · Pro plan</div>
+            <h3 className="text-lg font-bold text-slate-900 mt-1">Use the tools yourself on this website</h3>
+            <p className="text-xs text-slate-600 mt-1">The demos are free, and each email gets one free run per tool. Pro unlocks unlimited runs of all 6 tools on your own files, with Excel downloads.</p>
+          </div>
+          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {[{ p: monthly, id: 'pro_monthly' as PlanId, per: '/ month', note: 'Cancel any time' }, { p: yearly, id: 'pro_yearly' as PlanId, per: '/ year', note: 'Save 10% vs monthly' }].map(x => (
+              <div key={x.id} className="rounded-2xl bg-white border border-slate-200 p-4 flex flex-col gap-2">
+                <div><span className="text-2xl font-extrabold text-slate-900">{price(x.p, currency)}</span><span className="text-xs text-slate-500"> {x.per}</span></div>
+                <div className="text-[11px] text-slate-500">{x.note}</div>
+                <button onClick={() => pay(x.id, currency, x.p?.name ?? 'Pro')} disabled={paying !== null}
+                  className="mt-auto w-full py-2.5 rounded-full bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold flex items-center justify-center gap-2 disabled:opacity-60">
+                  {paying === x.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Lock className="w-3.5 h-3.5" />} Pay &amp; activate Pro
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+        <p className="mt-3 text-center text-[11px] text-slate-500">Secure payments by Razorpay — UPI, cards, net banking and wallets in India; international cards in USD. Access switches on as soon as the payment succeeds.</p>
+
         {/* Scope Note */}
-        <div className="mt-12 p-4 rounded-2xl bg-white border border-slate-200 max-w-2xl mx-auto flex items-center gap-3 text-xs text-slate-600 shadow-2xs">
+        <div className="mt-6 p-4 rounded-2xl bg-white border border-slate-200 max-w-2xl mx-auto flex items-center gap-3 text-xs text-slate-600 shadow-2xs">
           <ShieldCheck className="w-5 h-5 text-teal-600 shrink-0" />
           <span>
             Every engagement begins with a no-risk operational assessment to quantify time saved and verify technical viability before building.

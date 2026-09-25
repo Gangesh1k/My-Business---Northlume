@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { X, Mail, KeyRound, Loader2, ShieldCheck, ArrowLeft } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
-interface Props { toolLabel?: string; onClose: () => void; onDone: () => void }
+interface Props { toolLabel?: string; reason?: string; onClose: () => void; onDone: () => void }
 
-export const LoginModal: React.FC<Props> = ({ toolLabel, onClose, onDone }) => {
+export const LoginModal: React.FC<Props> = ({ toolLabel, reason, onClose, onDone }) => {
   const [step, setStep] = useState<'email' | 'code'>('email');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
@@ -49,9 +49,9 @@ export const LoginModal: React.FC<Props> = ({ toolLabel, onClose, onDone }) => {
         <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-100 text-slate-500" aria-label="Close"><X className="w-5 h-5" /></button>
         {step === 'email' ? (
           <form onSubmit={send} className="space-y-3">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-teal-50 text-teal-700 text-[11px] font-bold uppercase tracking-wider"><Mail className="w-3.5 h-3.5" /> Free trial</div>
-            <h3 className="text-xl font-extrabold text-slate-900">{toolLabel ? `Try ${toolLabel} on your own data` : 'Sign in to NorthLume AI'}</h3>
-            <p className="text-sm text-slate-600">Enter your work email and we'll send a 6-digit code. Each email gets <b>one free run per tool</b> on your own files; the sample demos stay free for everyone.</p>
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-teal-50 text-teal-700 text-[11px] font-bold uppercase tracking-wider"><Mail className="w-3.5 h-3.5" /> {reason ? 'Secure checkout' : 'Free trial'}</div>
+            <h3 className="text-xl font-extrabold text-slate-900">{reason ?? (toolLabel ? `Try ${toolLabel} on your own data` : 'Sign in to NorthLume AI')}</h3>
+            <p className="text-sm text-slate-600">{reason ? <>Enter your work email and we'll send a sign-in code. Your plan is linked to this email, so you can sign in on any device.</> : <>Enter your work email and we'll send a sign-in code. Each email gets <b>one free run per tool</b> on your own files; the sample demos stay free for everyone.</>}</p>
             <input className={input} type="email" required placeholder="you@company.com" value={email} onChange={e => setEmail(e.target.value)} autoFocus />
             <div className="grid grid-cols-2 gap-2">
               <input className={input} placeholder="Your name" value={name} onChange={e => setName(e.target.value)} />

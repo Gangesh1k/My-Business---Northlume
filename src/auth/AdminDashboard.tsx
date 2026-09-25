@@ -20,6 +20,7 @@ export const AdminDashboard: React.FC<{ onClose: () => void }> = ({ onClose }) =
   const [data, setData] = useState<Dash | null>(null);
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
+  const [pays, setPays] = useState<{ created_at: string; paid_at: string | null; email: string; plan_id: string; currency: string; amount: number; status: string; razorpay_payment_id: string | null; access_until: string | null }[]>([]);
 
   const load = useCallback(async () => {
     if (!supabase || !status.is_admin) return;
@@ -27,6 +28,8 @@ export const AdminDashboard: React.FC<{ onClose: () => void }> = ({ onClose }) =
     const { data: res, error } = await supabase.rpc('admin_dashboard', { p_days: days });
     setBusy(false);
     if (error) setErr(error.message); else setData(res as Dash);
+    const { data: p } = await supabase.from('payments').select('created_at,paid_at,email,plan_id,currency,amount,status,razorpay_payment_id,access_until').order('created_at', { ascending: false }).limit(200);
+    setPays((p as typeof pays) ?? []);
   }, [days, status.is_admin]);
   useEffect(() => { load(); }, [load]);
 
@@ -67,6 +70,8 @@ export const AdminDashboard: React.FC<{ onClose: () => void }> = ({ onClose }) =
     { name: 'Subscription requests', header: ['Date', 'Email', 'Name', 'Company', 'Plan', 'Tools', 'Message', 'Status'],
       rows: data.requests.map(r => [new Date(r.created_at), r.email, r.name, r.company, r.plan, r.tools.join(', '), r.message, r.status]) },
     { name: 'Leads', header: ['Date', 'Source', 'Name', 'Email', 'Company', 'Message'], rows: data.leads.map(l => [new Date(l.created_at), l.source, l.name, l.email, l.company, l.message]) },
+    { name: 'Payments', header: ['Created', 'Paid', 'Email', 'Plan', 'Currency', 'Amount', 'Status', 'Razorpay payment id', 'Access until'],
+      rows: pays.map(x => [new Date(x.created_at), x.paid_at ? new Date(x.paid_at) : null, x.email, x.plan_id, x.currency, x.amount / 100, x.status, x.razorpay_payment_id, x.access_until]) },
     { name: 'Traffic sources', header: ['Source', 'Visitors'], rows: data.sources.map(s => [s.source, s.visitors]) },
   ]);
 
@@ -86,6 +91,14 @@ export const AdminDashboard: React.FC<{ onClose: () => void }> = ({ onClose }) =
       <div className={card}><Bars title="Demo & tool runs" rows={data.demo_runs.map(s => ({ label: s.tool ?? '—', value: s.runs }))} /></div>
       <div className={card + ' flex flex-col justify-between'}><div><Label>Export</Label><p className="text-sm text-slate-600">Download users, subscription requests, leads and traffic sources as Excel.</p></div>
         <button onClick={exportAll} className="mt-3 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-teal-600 text-white text-sm font-semibold"><Download className="w-4 h-4" /> Download Excel</button></div>
+    </div>
+    <div className={card}>
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-2"><Label>Payments (Razorpay)</Label>
+        <div className="flex gap-2 text-xs">{(['INR', 'USD'] as const).map(c => { const paid = pays.filter(x => x.status === 'paid' && x.currency === c); return <span key={c} className="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 font-semibold">{c === 'INR' ? '₹' : '$'}{(paid.reduce((t, x) => t + x.amount, 0) / 100).toLocaleString(c === 'INR' ? 'en-IN' : 'en-US')} · {paid.length} paid</span>; })}</div></div>
+      {pays.length ? <MiniTable max={50} head={['Date', 'Email', 'Plan', 'Amount', 'Status', 'Access until', 'Payment id']} align={['l', 'l', 'l', 'r', 'l', 'l', 'l']}
+        rows={pays.map(x => [d(x.paid_at ?? x.created_at), x.email, x.plan_id, `${x.currency === 'INR' ? '₹' : '$'}${(x.amount / 100).toLocaleString()}`,
+          <span className={`px-1.5 rounded text-[10px] font-bold ${x.status === 'paid' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>{x.status === 'created' ? 'started, not paid' : x.status}</span>, x.access_until ?? '', x.razorpay_payment_id ?? ''])} />
+        : <p className="text-sm text-slate-500">No payments yet.</p>}
     </div>
     <div className={card}><Label>Subscription requests</Label>
       <MiniTable max={50} head={['Date', 'Email', 'Company', 'Plan', 'Tools', 'Status', 'Actions']}
