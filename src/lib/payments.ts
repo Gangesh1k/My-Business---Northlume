@@ -2,6 +2,7 @@
 // the order is created server-side (Edge Function razorpay-order) so nobody can change the amount.
 import { supabase } from './supabase';
 import { track } from './track';
+import { PAYMENT_FUNCTIONS } from '../config/supabase';
 
 export type Currency = 'INR' | 'USD';
 export type PlanId = 'pro_monthly' | 'pro_yearly' | 'starter' | 'business' | 'intelligent' | 'custom';
@@ -56,7 +57,7 @@ export interface PayResult { ok: boolean; cancelled?: boolean; error?: string; p
 export async function checkout(planId: PlanId, currency: Currency, prefill: { email?: string; name?: string } = {}): Promise<PayResult> {
   if (!supabase) return { ok: false, error: 'Payments are not available right now.' };
   track('cta_click', 'checkout', `${planId}:${currency}`);
-  const { data: order, error } = await supabase.functions.invoke('razorpay-order', { body: { plan_id: planId, currency } });
+  const { data: order, error } = await supabase.functions.invoke(PAYMENT_FUNCTIONS.order, { body: { plan_id: planId, currency } });
   if (error || !order?.order_id) {
     let msg = order?.error as string | undefined;
     try { msg = msg ?? (await (error as any)?.context?.json?.())?.error; } catch { /* ignore */ }
@@ -72,7 +73,7 @@ export async function checkout(planId: PlanId, currency: Currency, prefill: { em
       notes: { plan_id: planId }, theme: { color: '#0d9488' },
       modal: { ondismiss: () => resolve(lastError ? { ok: false, error: lastError } : { ok: false, cancelled: true }) },
       handler: async (r: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }) => {
-        const { data: v, error: ve } = await supabase!.functions.invoke('razorpay-verify', { body: r });
+        const { data: v, error: ve } = await supabase!.functions.invoke(PAYMENT_FUNCTIONS.verify, { body: r });
         if (ve || !v?.ok) {
           // money was taken; the webhook will still activate access — tell the customer clearly
           resolve({ ok: true, plan_id: planId, access_until: null, error: 'Payment received. Access is being switched on — refresh in a minute.' });

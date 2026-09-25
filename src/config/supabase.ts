@@ -8,3 +8,10 @@
 
 export const SUPABASE_URL = 'https://bxktwvntdgqerzlxypvo.supabase.co';          // looks like  https://abcdefgh.supabase.co
 export const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_rrE_nihqTQYaJg5L4NWZqQ_4O8spfz1';  // starts with sb_publishable_  (or eyJ… for the older anon key)
+
+// Names (URL slugs) of the payment Edge Functions, exactly as shown in the URL column of
+// Supabase → Edge Functions. Change these if Supabase gave a function a different slug.
+export const PAYMENT_FUNCTIONS = {
+  order: 'hyper-responder',     // the function displayed as "razorpay-order"
+  verify: 'razorpay-verify',
+};
