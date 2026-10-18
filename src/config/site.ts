@@ -15,7 +15,8 @@ export interface SiteConfig {
     bio: string;
   };
   contact: {
-    email: string;
+    email: string;          // sales enquiries
+    supportEmail: string;   // account, payment and privacy help
     linkedIn: string;
   };
   navLinks: { name: string; href: string }[];
@@ -50,7 +51,8 @@ export const siteConfig: SiteConfig = {
     bio: "Deep enterprise operations background driving high-yield process transformation, Lean Six Sigma methodologies, and practical AI execution for mission-critical business workflows."
   },
   contact: {
-    email: "gangesh@northlumeai.com",
+    email: "sales@northlumeai.com",
+    supportEmail: "support@northlumeai.com",
     linkedIn: "https://www.linkedin.com/in/gangesh-kumar-d-10268b56/",
   },
   navLinks: [

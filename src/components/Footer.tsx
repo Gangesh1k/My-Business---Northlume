@@ -160,11 +160,21 @@ export const Footer: React.FC<FooterProps> = ({ onOpenConsultation, onOpenDeploy
                 </a>
               </li>
               <li>
+                <span className="text-slate-500">Sales: </span>
                 <a
                   href={`mailto:${siteConfig.contact.email}`}
                   className="hover:text-white transition-colors"
                 >
                   {siteConfig.contact.email}
+                </a>
+              </li>
+              <li>
+                <span className="text-slate-500">Support: </span>
+                <a
+                  href={`mailto:${siteConfig.contact.supportEmail}`}
+                  className="hover:text-white transition-colors"
+                >
+                  {siteConfig.contact.supportEmail}
                 </a>
               </li>
               <li>

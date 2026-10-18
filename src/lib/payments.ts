@@ -61,7 +61,7 @@ export async function checkout(planId: PlanId, currency: Currency, prefill: { em
   if (error || !order?.order_id) {
     let msg = order?.error as string | undefined;
     try { msg = msg ?? (await (error as any)?.context?.json?.())?.error; } catch { /* ignore */ }
-    return { ok: false, error: msg ?? 'Could not start the payment. Please try again or email us.' };
+    return { ok: false, error: msg ?? 'Could not start the payment. Please try again or email support@northlumeai.com.' };
   }
   await loadScript();
   let lastError = '';
@@ -71,6 +71,7 @@ export async function checkout(planId: PlanId, currency: Currency, prefill: { em
       name: 'NorthLume AI', description: order.plan_name, image: `${location.origin}/apple-touch-icon.png`,
       prefill: { email: prefill.email ?? order.email, name: prefill.name ?? '' },
       notes: { plan_id: planId }, theme: { color: '#0d9488' },
+      remember_customer: false,   // don't show a phone number saved from an earlier checkout on this browser
       modal: { ondismiss: () => resolve(lastError ? { ok: false, error: lastError } : { ok: false, cancelled: true }) },
       handler: async (r: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }) => {
         const { data: v, error: ve } = await supabase!.functions.invoke(PAYMENT_FUNCTIONS.verify, { body: r });

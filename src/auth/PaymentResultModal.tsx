@@ -20,7 +20,7 @@ export const PaymentResultModal: React.FC<{ result: PayResult & { label: string 
             {result.error && <p className="text-amber-700">{result.error}</p>}
           </div>
         ) : (
-          <p className="text-sm text-slate-600">{result.error ?? 'The payment did not go through.'} If money was deducted, it is refunded automatically by your bank, or email <a className="underline" href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a>.</p>
+          <p className="text-sm text-slate-600">{result.error ?? 'The payment did not go through.'} If money was deducted, it is refunded automatically by your bank, or email <a className="underline" href={`mailto:${siteConfig.contact.supportEmail}`}>{siteConfig.contact.supportEmail}</a>.</p>
         )}
         <button onClick={onClose} className="mt-2 px-6 py-2.5 rounded-full bg-slate-900 text-white text-sm font-semibold">{result.ok ? 'Start using it' : 'Close'}</button>
       </div>

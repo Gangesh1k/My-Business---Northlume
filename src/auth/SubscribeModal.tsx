@@ -37,7 +37,7 @@ export const SubscribeModal: React.FC<Props> = ({ tool, email, userId, onClose }
       phone: form.phone || null, plan_interest: plan, tools, message: form.message || null,
     });
     setBusy(false);
-    if (error) { setErr('Could not send right now — please email us at ' + siteConfig.contact.email); return; }
+    if (error) { setErr('Could not send right now — please email us at ' + siteConfig.contact.supportEmail); return; }
     track('subscribe_request', plan, tools.join(','));
     setDone(true);
   };
