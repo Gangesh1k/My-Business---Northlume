@@ -5,8 +5,8 @@ import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from '../config/supabase';
 // The publishable/anon key is designed to be public; all data is protected by row-level security in supabase/schema.sql.
 const env = import.meta.env as Record<string, string | undefined>;
 const clean = (v?: string) => (v ?? '').trim().replace(/^['"]|['"]$/g, '').replace(/\/+$/, '');
-const url = clean(env.VITE_SUPABASE_URL) || clean(SUPABASE_URL);
-const anonKey = clean(env.VITE_SUPABASE_ANON_KEY) || clean(env.VITE_SUPABASE_PUBLISHABLE_KEY) || clean(SUPABASE_PUBLISHABLE_KEY);
+export const url = clean(env.VITE_SUPABASE_URL) || clean(SUPABASE_URL);
+export const anonKey = clean(env.VITE_SUPABASE_ANON_KEY) || clean(env.VITE_SUPABASE_PUBLISHABLE_KEY) || clean(SUPABASE_PUBLISHABLE_KEY);
 
 /** true once the site is connected to Supabase. Until then the site works as before (no sign-in, no limits). */
 export const supabaseReady = /^https:\/\/[^/]+\.supabase\.(co|in)$/.test(url) && anonKey.length > 20 && !anonKey.startsWith('PASTE_');

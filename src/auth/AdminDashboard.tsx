@@ -3,6 +3,7 @@ import { X, RefreshCw, Users, Eye, MousePointerClick, Crown, Inbox, Download, Lo
 import { supabase } from '../lib/supabase';
 import { useAccess } from './AccessProvider';
 import { downloadXlsx, LineChart, Bars, MiniTable, Label } from '../components/demos/kit';
+import { VisitorsPanel, VisitorRow, dur, place } from './VisitorsPanel';
 
 interface Dash {
   visitors: number; sessions: number; page_views: number; signups: number; paid: number; requests_new: number;
@@ -20,6 +21,7 @@ export const AdminDashboard: React.FC<{ onClose: () => void }> = ({ onClose }) =
   const [data, setData] = useState<Dash | null>(null);
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
+  const [visitors, setVisitors] = useState<VisitorRow[]>([]);
   const [pays, setPays] = useState<{ created_at: string; paid_at: string | null; email: string; plan_id: string; currency: string; amount: number; status: string; razorpay_payment_id: string | null; access_until: string | null }[]>([]);
 
   const load = useCallback(async () => {
@@ -28,6 +30,8 @@ export const AdminDashboard: React.FC<{ onClose: () => void }> = ({ onClose }) =
     const { data: res, error } = await supabase.rpc('admin_dashboard', { p_days: days });
     setBusy(false);
     if (error) setErr(error.message); else setData(res as Dash);
+    const { data: vis } = await supabase.rpc('admin_visitors', { p_days: days, p_limit: 1000 });
+    setVisitors((vis as VisitorRow[]) ?? []);
     const { data: p } = await supabase.from('payments').select('created_at,paid_at,email,plan_id,currency,amount,status,razorpay_payment_id,access_until').order('created_at', { ascending: false }).limit(200);
     setPays((p as typeof pays) ?? []);
   }, [days, status.is_admin]);
@@ -72,6 +76,8 @@ export const AdminDashboard: React.FC<{ onClose: () => void }> = ({ onClose }) =
     { name: 'Leads', header: ['Date', 'Source', 'Name', 'Email', 'Company', 'Message'], rows: data.leads.map(l => [new Date(l.created_at), l.source, l.name, l.email, l.company, l.message]) },
     { name: 'Payments', header: ['Created', 'Paid', 'Email', 'Plan', 'Currency', 'Amount', 'Status', 'Razorpay payment id', 'Access until'],
       rows: pays.map(x => [new Date(x.created_at), x.paid_at ? new Date(x.paid_at) : null, x.email, x.plan_id, x.currency, x.amount / 100, x.status, x.razorpay_payment_id, x.access_until]) },
+    { name: 'Visitors', header: ['Visitor', 'Email', 'Company', 'Location', 'Came from', 'Campaign', 'Device', 'First visit', 'Last visit', 'Visits', 'Time on site', 'Seconds', 'Pages', 'Demos', 'Sections seen'],
+      rows: visitors.filter(v => !v.is_admin).map(v => [v.email ? (v.name || v.email) : `Anonymous ${v.id}`, v.email, v.company, place(v), v.source, v.campaign, v.device, new Date(v.first_seen), new Date(v.last_seen), v.visits, dur(v.secs), v.secs, v.pages, v.demos, v.sections.join(', ')]) },
     { name: 'Traffic sources', header: ['Source', 'Visitors'], rows: data.sources.map(s => [s.source, s.visitors]) },
   ]);
 
@@ -89,9 +95,10 @@ export const AdminDashboard: React.FC<{ onClose: () => void }> = ({ onClose }) =
       <div className={card}><Bars title="Where visitors come from" rows={data.sources.map(s => ({ label: s.source, value: s.visitors }))} /></div>
       <div className={card}><Bars title="Most viewed sections" rows={data.top_sections.map(s => ({ label: s.section, value: s.views }))} /></div>
       <div className={card}><Bars title="Demo & tool runs" rows={data.demo_runs.map(s => ({ label: s.tool ?? '—', value: s.runs }))} /></div>
-      <div className={card + ' flex flex-col justify-between'}><div><Label>Export</Label><p className="text-sm text-slate-600">Download users, subscription requests, leads and traffic sources as Excel.</p></div>
+      <div className={card + ' flex flex-col justify-between'}><div><Label>Export</Label><p className="text-sm text-slate-600">Download visitors, users, subscription requests, leads, payments and traffic sources as Excel.</p></div>
         <button onClick={exportAll} className="mt-3 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-teal-600 text-white text-sm font-semibold"><Download className="w-4 h-4" /> Download Excel</button></div>
     </div>
+    <VisitorsPanel rows={visitors} />
     <div className={card}>
       <div className="flex flex-wrap items-center justify-between gap-2 mb-2"><Label>Payments (Razorpay)</Label>
         <div className="flex gap-2 text-xs">{(['INR', 'USD'] as const).map(c => { const paid = pays.filter(x => x.status === 'paid' && x.currency === c); return <span key={c} className="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 font-semibold">{c === 'INR' ? '₹' : '$'}{(paid.reduce((t, x) => t + x.amount, 0) / 100).toLocaleString(c === 'INR' ? 'en-IN' : 'en-US')} · {paid.length} paid</span>; })}</div></div>
