@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase';
 import { useAccess } from './AccessProvider';
 import { downloadXlsx, LineChart, Bars, MiniTable, Label } from '../components/demos/kit';
 import { VisitorsPanel, VisitorRow, dur, place } from './VisitorsPanel';
+import { LeadsPanel, LeadRow } from './LeadsPanel';
 
 interface Dash {
   visitors: number; sessions: number; page_views: number; signups: number; paid: number; requests_new: number;
@@ -11,7 +12,7 @@ interface Dash {
   sources: { source: string; visitors: number }[]; demo_runs: { tool: string; runs: number }[];
   users: { email: string; name: string | null; company: string | null; plan: string; created_at: string; last_seen_at: string; runs: number; blocked: number; visits: number }[];
   requests: { id: number; email: string; name: string | null; company: string | null; plan: string | null; tools: string[]; message: string | null; status: string; created_at: string }[];
-  leads: { source: string; name: string | null; email: string; company: string | null; message: string | null; created_at: string }[];
+  leads: LeadRow[];
 }
 const d = (s: string) => new Date(s).toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
 
@@ -73,7 +74,7 @@ export const AdminDashboard: React.FC<{ onClose: () => void }> = ({ onClose }) =
       rows: data.users.map(u => [u.email, u.name, u.company, u.plan, new Date(u.created_at), new Date(u.last_seen_at), u.runs, u.blocked, u.visits]) },
     { name: 'Subscription requests', header: ['Date', 'Email', 'Name', 'Company', 'Plan', 'Tools', 'Message', 'Status'],
       rows: data.requests.map(r => [new Date(r.created_at), r.email, r.name, r.company, r.plan, r.tools.join(', '), r.message, r.status]) },
-    { name: 'Leads', header: ['Date', 'Source', 'Name', 'Email', 'Company', 'Message'], rows: data.leads.map(l => [new Date(l.created_at), l.source, l.name, l.email, l.company, l.message]) },
+    { name: 'Leads', header: ['Date', 'Source', 'Name', 'Email', 'Phone', 'Company', 'Message'], rows: data.leads.map(l => [new Date(l.created_at), l.source, l.name, l.email, l.phone ?? null, l.company, l.message]) },
     { name: 'Payments', header: ['Created', 'Paid', 'Email', 'Plan', 'Currency', 'Amount', 'Status', 'Razorpay payment id', 'Access until'],
       rows: pays.map(x => [new Date(x.created_at), x.paid_at ? new Date(x.paid_at) : null, x.email, x.plan_id, x.currency, x.amount / 100, x.status, x.razorpay_payment_id, x.access_until]) },
     { name: 'Visitors', header: ['Visitor', 'Email', 'Company', 'Location', 'Came from', 'Campaign', 'Device', 'First visit', 'Last visit', 'Visits', 'Time on site', 'Seconds', 'Pages', 'Demos', 'Sections seen'],
@@ -98,6 +99,7 @@ export const AdminDashboard: React.FC<{ onClose: () => void }> = ({ onClose }) =
       <div className={card + ' flex flex-col justify-between'}><div><Label>Export</Label><p className="text-sm text-slate-600">Download visitors, users, subscription requests, leads, payments and traffic sources as Excel.</p></div>
         <button onClick={exportAll} className="mt-3 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-teal-600 text-white text-sm font-semibold"><Download className="w-4 h-4" /> Download Excel</button></div>
     </div>
+    <LeadsPanel rows={data.leads} />
     <VisitorsPanel rows={visitors} />
     <div className={card}>
       <div className="flex flex-wrap items-center justify-between gap-2 mb-2"><Label>Payments (Razorpay)</Label>
@@ -117,8 +119,6 @@ export const AdminDashboard: React.FC<{ onClose: () => void }> = ({ onClose }) =
         rows={data.users.map(u => [u.email, u.name ?? '', u.company ?? '', u.plan, d(u.created_at), d(u.last_seen_at), String(u.runs), String(u.blocked), String(u.visits),
           u.plan === 'free' ? <button onClick={() => activate(u.email, 'pro')} className="text-[11px] px-2 py-0.5 rounded-full border border-teal-600 text-teal-700">Give Pro</button>
             : <button onClick={() => activate(u.email, 'free')} className="text-[11px] px-2 py-0.5 rounded-full border border-slate-300 text-slate-600">Set free</button>])} /></div>
-    <div className={card}><Label>Leads from forms</Label>
-      <MiniTable max={50} head={['Date', 'Source', 'Name', 'Email', 'Company', 'Message']} rows={data.leads.map(l => [d(l.created_at), l.source, l.name ?? '', l.email, l.company ?? '', l.message ?? ''])} /></div>
     <p className="text-[11px] text-slate-500">Anonymous visitors are counted by a random browser id; names and emails appear only for people who registered. Their earlier visits are linked to them once they register.</p>
   </>);
 };

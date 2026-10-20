@@ -212,7 +212,9 @@ create table if not exists public.leads (
   email      text not null check (char_length(email) <= 200),
   company    text check (char_length(company) <= 160),
   message    text check (char_length(message) <= 4000),
+  phone      text check (char_length(phone) <= 40),
   visitor_id uuid,
+  notified_at timestamptz,
   created_at timestamptz not null default now()
 );
 alter table public.leads enable row level security;
@@ -264,8 +266,8 @@ begin
                'tools', tools, 'message', message, 'status', status, 'created_at', created_at) r
         from subscription_requests order by created_at desc limit 200) x), '[]'),
     'leads', coalesce((select jsonb_agg(l order by l->>'created_at' desc) from (
-        select jsonb_build_object('source', source, 'name', full_name, 'email', email, 'company', company,
-               'message', left(message, 300), 'created_at', created_at) l
+        select jsonb_build_object('id', id, 'source', source, 'name', full_name, 'email', email, 'company', company,
+               'phone', phone, 'message', message, 'created_at', created_at, 'notified_at', notified_at) l
         from leads order by created_at desc limit 200) x), '[]')
   );
 end $$;

@@ -12,7 +12,8 @@ import {
   Check,
   Building,
   User,
-  MessageSquare
+  MessageSquare,
+  Phone
 } from 'lucide-react';
 
 interface LeadCTAProps {
@@ -24,6 +25,7 @@ export const LeadCTA: React.FC<LeadCTAProps> = ({ initialNotes = '', onOpenConsu
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
+  const [phone, setPhone] = useState('');
   const [notes, setNotes] = useState(initialNotes);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -31,12 +33,12 @@ export const LeadCTA: React.FC<LeadCTAProps> = ({ initialNotes = '', onOpenConsu
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitted(true);
-    saveLead('lead_form', { name, email, company, message: notes });
+    saveLead('lead_form', { name, email, company, phone, message: notes });
 
     // Formulate a pre-filled mailto fallback link
     const subject = encodeURIComponent(`AI Automation Assessment Request: ${company || name || 'Operations Inquiry'}`);
     const body = encodeURIComponent(
-      `Hello Gangesh,\n\nI would like to explore automating an operational process.\n\nName: ${name}\nCompany: ${company}\nEmail: ${email}\nProcess to Automate:\n${notes}\n\nLooking forward to speaking.`
+      `Hello Gangesh,\n\nI would like to explore automating an operational process.\n\nName: ${name}\nCompany: ${company}\nEmail: ${email}\nPhone: ${phone}\nProcess to Automate:\n${notes}\n\nLooking forward to speaking.`
     );
     const mailtoUrl = `mailto:${siteConfig.contact.email}?subject=${subject}&body=${body}`;
     
@@ -177,18 +179,34 @@ export const LeadCTA: React.FC<LeadCTAProps> = ({ initialNotes = '', onOpenConsu
                   </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-xs font-mono text-slate-300 flex items-center gap-1.5">
-                    <Building className="w-3.5 h-3.5 text-teal-400" />
-                    <span>Company Name / Team</span>
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Acme Operations / Logistics Team"
-                    value={company}
-                    onChange={(e) => setCompany(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-teal-500 placeholder:text-slate-600 transition-colors"
-                  />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-mono text-slate-300 flex items-center gap-1.5">
+                      <Building className="w-3.5 h-3.5 text-teal-400" />
+                      <span>Company Name / Team</span>
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Acme Operations / Logistics Team"
+                      value={company}
+                      onChange={(e) => setCompany(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-teal-500 placeholder:text-slate-600 transition-colors"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-mono text-slate-300 flex items-center gap-1.5">
+                      <Phone className="w-3.5 h-3.5 text-teal-400" />
+                      <span>Phone / WhatsApp (optional)</span>
+                    </label>
+                    <input
+                      type="tel"
+                      placeholder="+91 98xxx xxxxx"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      maxLength={40}
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-teal-500 placeholder:text-slate-600 transition-colors"
+                    />
+                  </div>
                 </div>
 
                 <div className="space-y-1.5">

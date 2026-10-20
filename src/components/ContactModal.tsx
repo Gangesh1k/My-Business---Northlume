@@ -27,6 +27,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
+  const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -41,11 +42,11 @@ export const ContactModal: React.FC<ContactModalProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitted(true);
-    saveLead(initialTopic?.toLowerCase().includes('pilot') ? 'pilot' : initialTopic?.toLowerCase().includes('score') ? 'scorecard' : 'consultation', { name, email, company, message: [initialTopic, message].filter(Boolean).join(' — ') });
+    saveLead(initialTopic?.toLowerCase().includes('pilot') ? 'pilot' : initialTopic?.toLowerCase().includes('score') ? 'scorecard' : 'consultation', { name, email, company, phone, message: [initialTopic, message].filter(Boolean).join(' — ') });
 
     const subject = encodeURIComponent(`Consultation Booking: ${company || name || 'Operations Automation'}`);
     const body = encodeURIComponent(
-      `Hello Gangesh,\n\nI would like to book an operational automation consultation.\n\nName: ${name}\nCompany: ${company}\nEmail: ${email}\n\nDetails:\n${message}`
+      `Hello Gangesh,\n\nI would like to book an operational automation consultation.\n\nName: ${name}\nCompany: ${company}\nEmail: ${email}\nPhone: ${phone}\n\nDetails:\n${message}`
     );
     window.location.href = `mailto:${siteConfig.contact.email}?subject=${subject}&body=${body}`;
   };
@@ -118,6 +119,18 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                   placeholder="alex@company.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:border-teal-500 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-mono text-slate-300 block mb-1">Phone / WhatsApp (optional)</label>
+                <input
+                  type="tel"
+                  placeholder="+91 98xxx xxxxx"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  maxLength={40}
                   className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:border-teal-500 focus:outline-none"
                 />
               </div>

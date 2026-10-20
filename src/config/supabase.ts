@@ -15,3 +15,6 @@ export const PAYMENT_FUNCTIONS = {
   order: 'hyper-responder',     // the function displayed as "razorpay-order"
   verify: 'razorpay-verify',
 };
+
+// Name (URL slug) of the Edge Function that emails you about new website leads.
+export const LEAD_NOTIFY_FUNCTION = 'lead-notify';
