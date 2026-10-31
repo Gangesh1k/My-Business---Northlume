@@ -306,7 +306,7 @@ export const useCases: UseCaseCategory[] = [
       },
       {
         name: 'Bank & Ledger Reconciliation',
-        description: 'Multi-account transaction matching with automated journal entry preparation for unreconciled line items.',
+        description: 'Multi-account transaction matching (including SAP G/L vs MT940 / CAMT.053) with automated journal entry preparation for unreconciled line items.',
         impact: 'Month-end close shortened by 3 business days'
       },
       {
@@ -513,6 +513,10 @@ export const scorecardQuestions: ScorecardQuestion[] = [
 ];
 
 export const faqItems: FAQItem[] = [
+  {
+    question: 'Do you work with SAP? Can you automate bank reconciliation?',
+    answer: 'Yes. We reconcile SAP bank G/L accounts (ECC 6.0 and S/4HANA) against MT940, CAMT.053 or BAI2 bank statements. Matching covers references, bank charges, invoice numbers in the narrative, F110 payment runs and lockbox batches. Every exception comes with a reason and a proposed posting, and nothing posts in SAP without your approval. You can try it in the SAP Bank Reconciliation live demo on this page.'
+  },
   {
     question: 'What types of businesses do you work with?',
     answer: 'We work primarily with small and mid-sized businesses, BPOs, fast-growing startups, and departmental operations teams (Finance, Operations, Supply Chain, Shared Services) that are constrained by repetitive manual processes, Excel dependencies, and high-volume email workflows.'

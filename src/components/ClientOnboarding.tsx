@@ -50,6 +50,13 @@ const PLANS: Record<DemoId, Plan> = {
     receive: ['Reconciliations, vendor replies and compliance checks done before you log in', 'Summary of what was done, what needs you, and why'],
     access: ['Read access to source systems', 'Anything that posts, pays or sends needs human approval'],
   },
+  'sap-bank-recon': {
+    channel: 'A daily reconciliation run with an exceptions queue by email or Teams, plus the month-end reconciliation pack',
+    setup: ['House banks, accounts and G/L clearing accounts mapped (FI12 / FBL3N)', 'Bank statement feed connected: MT940, CAMT.053 or BAI2', 'Matching rules and tolerances agreed with your controllers', 'Posting rules and approval levels for proposed entries'],
+    daily: ['Review the exceptions queue — matched items need no touch', 'Approve proposed postings with one click; they post through FEBAN / FB50'],
+    receive: ['Daily matched / unmatched report per bank account', 'Month-end bank reconciliation statement with full audit trail', 'Alerts for duplicates, stale cheques and unidentified receipts'],
+    access: ['Read-only SAP user or scheduled FBL3N / ACDOCA extract', 'Bank statement files (no bank credentials needed)', 'Posting only through an approved, limited SAP role'],
+  },
 };
 
 const HOSTING = [

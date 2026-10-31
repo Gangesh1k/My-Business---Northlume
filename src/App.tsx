@@ -3,6 +3,7 @@ import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { BusinessProblems } from './components/BusinessProblems';
 import { WhatWeAutomate } from './components/WhatWeAutomate';
+import { SapReconFeature } from './components/SapReconFeature';
 import { InteractiveWorkflowDemo } from './components/InteractiveWorkflowDemo';
 import { CapabilityDemos, DEMOS, DemoId } from './components/CapabilityDemos';
 import { ClientOnboarding } from './components/ClientOnboarding';
@@ -12,7 +13,6 @@ import { UseCases } from './components/UseCases';
 import { BusinessImpact } from './components/BusinessImpact';
 import { HowItWorks } from './components/HowItWorks';
 import { MiniCaseStudies } from './components/MiniCaseStudies';
-import { FounderCredibility } from './components/FounderCredibility';
 import { AutomationScorecard } from './components/AutomationScorecard';
 import { FAQ } from './components/FAQ';
 import { LeadCTA } from './components/LeadCTA';
@@ -96,6 +96,12 @@ export default function App() {
           onTryDemo={openDemo}
         />
 
+        {/* 4a. SAP Bank Reconciliation feature */}
+        <SapReconFeature
+          onTryDemo={() => openDemo('sap-bank-recon')}
+          onOpenConsultation={() => handleOpenConsultation('SAP Bank Reconciliation walkthrough')}
+        />
+
         {/* 4b. Live demo for every capability (tabs) */}
         <CapabilityDemos
           active={activeDemo}
@@ -138,11 +144,6 @@ export default function App() {
 
         {/* 11. Mini Case Studies / Illustrative Scenarios */}
         <MiniCaseStudies />
-
-        {/* 12. About & Founder Credibility */}
-        <FounderCredibility
-          onOpenConsultation={() => handleOpenConsultation('Founder Direct Operations Review')}
-        />
 
         {/* 13. Automation Scorecard (5-Question Tool) */}
         <AutomationScorecard

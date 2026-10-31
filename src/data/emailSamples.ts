@@ -42,7 +42,7 @@ for (let i = 0; i < 40; i++) {
 const agents: (string | number)[][] = [['Shift A', 'Priya', 312, 280, 6.1, 6.5], ['Shift A', 'Rahul', 298, 280, 6.4, 6.5], ['Shift A', 'Neha', 241, 280, 7.9, 6.5],
   ['Shift B', 'Arjun', 305, 280, 6.2, 6.5], ['Shift B', 'Kavya', 226, 280, 8.4, 6.5], ['Shift B', 'Imran', 287, 280, 6.6, 6.5],
   ['Shift C', 'Sneha', 318, 280, 5.9, 6.5], ['Shift C', 'Vikram', 219, 280, 8.8, 6.5], ['Shift C', 'Anita', 276, 280, 6.9, 6.5]];
-const shiftHtml = `<p>Hi Gangesh,</p><p><b>Urgent:</b> yesterday's productivity dropped on a few seats. Numbers below.</p>
+const shiftHtml = `<p>Hi team,</p><p><b>Urgent:</b> yesterday's productivity dropped on a few seats. Numbers below.</p>
 <table><tr><th>Shift</th><th>Agent</th><th>Tickets Closed</th><th>Target Tickets</th><th>Actual AHT (min)</th><th>AHT Target (min)</th></tr>
 ${agents.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</table><p>Please advise.<br>— Team Lead, Service Desk</p>`;
 
@@ -76,7 +76,7 @@ export const sampleEmails: SampleEmail[] = [
   },
   {
     id: 'html', from: 'Service Desk TL <tl.servicedesk@acme-bpo.demo>', subject: 'URGENT: Shift productivity 21-Sep', received: '08:08',
-    preview: "Hi Gangesh,\n\nUrgent: yesterday's productivity dropped on a few seats. Numbers below.", html: shiftHtml, sourceLabel: 'Table in email body',
+    preview: "Hi team,\n\nUrgent: yesterday's productivity dropped on a few seats. Numbers below.", html: shiftHtml, sourceLabel: 'Table in email body',
   },
   {
     id: 'text', from: 'Warehouse <wh.team@acme-retail.demo>', subject: 'Weekly stock position', received: '08:09',

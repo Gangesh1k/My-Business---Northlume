@@ -46,7 +46,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
 
     const subject = encodeURIComponent(`Consultation Booking: ${company || name || 'Operations Automation'}`);
     const body = encodeURIComponent(
-      `Hello Gangesh,\n\nI would like to book an operational automation consultation.\n\nName: ${name}\nCompany: ${company}\nEmail: ${email}\nPhone: ${phone}\n\nDetails:\n${message}`
+      `Hello NorthLume team,\n\nI would like to book an operational automation consultation.\n\nName: ${name}\nCompany: ${company}\nEmail: ${email}\nPhone: ${phone}\n\nDetails:\n${message}`
     );
     window.location.href = `mailto:${siteConfig.contact.email}?subject=${subject}&body=${body}`;
   };
@@ -94,7 +94,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                 Book Free AI Automation Consultation
               </h3>
               <p className="text-xs text-slate-400 mt-1">
-                Speak directly with Lean Six Sigma Master Black Belt leadership.
+                A 30-minute review of one of your processes with our automation team.
               </p>
             </div>
 
@@ -160,15 +160,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
             </div>
 
             <div className="pt-2 flex items-center justify-between gap-3">
-              <a
-                href={siteConfig.contact.linkedIn}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[11px] font-mono text-sky-400 hover:text-sky-300 flex items-center gap-1"
-              >
-                <span>Or message on LinkedIn</span>
-                <ArrowUpRight className="w-3 h-3" />
-              </a>
+              <span />
 
               <button
                 type="submit"

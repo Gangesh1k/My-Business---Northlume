@@ -2,13 +2,14 @@ import React from 'react';
 import { ReportingTool } from './tools/ReportingTool';
 import { WorkflowTool } from './tools/WorkflowTool';
 import { ReconTool } from './tools/ReconTool';
-import { Mail, FileSpreadsheet, BarChart3, Sparkles, Share2, Bot, PlayCircle } from 'lucide-react';
+import { Mail, FileSpreadsheet, BarChart3, Sparkles, Share2, Bot, PlayCircle, Landmark } from 'lucide-react';
 import { EmailAutomationLab } from './EmailAutomationLab';
 import { ExcelDemo } from './demos/ExcelDemo';
 import { ReportingDemo } from './demos/ReportingDemo';
 import { InsightsDemo } from './demos/InsightsDemo';
 import { WorkflowDemo } from './demos/WorkflowDemo';
 import { AgentsDemo } from './demos/AgentsDemo';
+import { SapReconDemo } from './demos/SapReconDemo';
 
 export const DEMOS = [
   { id: 'email-automation', label: 'Email Automation', icon: Mail, blurb: 'Reads each email, pulls the data from the attachment — or the table in the body — analyses it and replies with the findings.' },
@@ -17,6 +18,7 @@ export const DEMOS = [
   { id: 'ai-business-insights', label: 'AI Business Insights', icon: Sparkles, blurb: 'Ask business questions in plain English and get answers, root causes and charts from the data — plus an automatic executive brief.' },
   { id: 'workflow-automation', label: 'Workflow Automation', icon: Share2, blurb: 'Customer billing disputes are classified, routed to the right team with an SLA, and synced to ERP, CRM and a tracker automatically.' },
   { id: 'ai-agents', label: 'AI Operational Agents', icon: Bot, blurb: 'Watch an agent plan, call tools and make decisions: reconcile bank receipts, answer vendor queries, or check invoices before payment.' },
+  { id: 'sap-bank-recon', label: 'SAP Bank Reconciliation', icon: Landmark, blurb: 'Matches the SAP bank G/L account (FBL3N) against the MT940 bank statement, explains every difference, proposes the postings and produces the bank reconciliation statement.' },
 ] as const;
 export type DemoId = typeof DEMOS[number]['id'];
 
@@ -79,6 +81,7 @@ export const CapabilityDemos: React.FC<Props> = ({ active, onChange, onOpenConsu
           {active === 'ai-business-insights' && <InsightsDemo onOpenConsultation={consult} />}
           {active === 'workflow-automation' && <WorkflowDemo onOpenConsultation={consult} />}
           {active === 'ai-agents' && <AgentsDemo onOpenConsultation={consult} />}
+          {active === 'sap-bank-recon' && <SapReconDemo onOpenConsultation={consult} />}
         </div>}
       </div>
     </section>
