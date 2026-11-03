@@ -9,6 +9,10 @@ interface NavbarProps {
   onOpenDeployGuide: () => void;
 }
 
+// On sub-pages (e.g. /sap-bank-reconciliation) section links point back to the home page.
+const onHome = typeof window === 'undefined' || window.location.pathname === '/' || window.location.pathname === '';
+const navHref = (href: string) => (href.startsWith('#') && !onHome ? '/' + href : href);
+
 export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation, onOpenDeployGuide }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -53,7 +57,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation, onOpenDeploy
           
           {/* Brand Logo & Identifier */}
           <a
-            href="#"
+            href={onHome ? "#" : "/"}
             className="flex items-center gap-3 group transition-transform hover:opacity-95 shrink-0"
             id="nav-logo"
             aria-label="NorthLume AI Home"
@@ -81,7 +85,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation, onOpenDeploy
               return (
                 <a
                   key={link.name}
-                  href={link.href}
+                  href={navHref(link.href)}
                   className={`px-2.5 2xl:px-3 py-1.5 text-xs font-semibold rounded-full transition-all duration-150 whitespace-nowrap ${
                     isActive
                       ? 'bg-white text-slate-900 shadow-2xs font-bold'
@@ -136,7 +140,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation, onOpenDeploy
               {siteConfig.navLinks.map((link) => (
                 <a
                   key={link.name}
-                  href={link.href}
+                  href={navHref(link.href)}
                   onClick={() => setMobileMenuOpen(false)}
                   className="px-3 py-2 text-xs font-medium text-slate-700 hover:text-teal-700 hover:bg-teal-50/70 rounded-xl transition-colors flex items-center justify-between"
                 >

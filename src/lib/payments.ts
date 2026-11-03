@@ -5,7 +5,8 @@ import { track } from './track';
 import { PAYMENT_FUNCTIONS } from '../config/supabase';
 
 export type Currency = 'INR' | 'USD';
-export type PlanId = 'pro_monthly' | 'pro_yearly' | 'starter' | 'business' | 'intelligent' | 'custom';
+export type PlanId = 'pro_monthly' | 'pro_yearly' | 'starter' | 'business' | 'intelligent' | 'custom'
+  | 'sap_recon_setup' | 'sap_recon_monthly' | 'sap_recon_yearly';
 export interface PricePlan { id: PlanId; name: string; kind: 'subscription' | 'service'; inr_paise: number; usd_cents: number; period_days: number | null; blurb: string | null }
 
 /** Shown until the live price list loads (and if it can't). Keep in step with supabase/payments.sql. */
@@ -16,6 +17,9 @@ export const DEFAULT_PLANS: PricePlan[] = [
   { id: 'business', name: 'Business Automation', kind: 'service', inr_paise: 14999900, usd_cents: 179900, period_days: 365, blurb: 'Up to 3–5 connected workflows' },
   { id: 'intelligent', name: 'Intelligent Operations', kind: 'service', inr_paise: 34999900, usd_cents: 419900, period_days: 365, blurb: 'Full operations control tower' },
   { id: 'custom', name: 'Custom AI Solutions — scoping deposit', kind: 'service', inr_paise: 2500000, usd_cents: 29900, period_days: 365, blurb: 'Adjusted against the final quote' },
+  { id: 'sap_recon_setup', name: 'Live SAP Bank Reconciliation — setup + first month', kind: 'service', inr_paise: 7500000, usd_cents: 99900, period_days: 31, blurb: '1 company code, up to 3 bank accounts: mapping, matching rules, testing, go-live' },
+  { id: 'sap_recon_monthly', name: 'Live SAP Bank Reconciliation — monthly', kind: 'subscription', inr_paise: 1500000, usd_cents: 19900, period_days: 31, blurb: 'Daily automatic reconciliation, exceptions queue, month-end pack' },
+  { id: 'sap_recon_yearly', name: 'Live SAP Bank Reconciliation — yearly (save 10%)', kind: 'subscription', inr_paise: 16200000, usd_cents: 214900, period_days: 366, blurb: '12 months for the price of 10.8' },
 ];
 
 let cache: PricePlan[] | null = null;

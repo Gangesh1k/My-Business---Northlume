@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { Landmark, PlayCircle, ArrowRight, GitCompareArrows, ShieldAlert, FileCheck2, Database, CheckCircle2 } from 'lucide-react';
 import { money, r2, reconcile, sampleData } from '../lib/sapRecon';
+import { SapLivePlan } from './SapLivePlan';
 
 interface Props { onTryDemo: () => void; onOpenConsultation: () => void }
 
@@ -43,7 +44,7 @@ export const SapReconFeature: React.FC<Props> = ({ onTryDemo, onOpenConsultation
           </div>
           <div className="flex flex-wrap gap-3">
             <button type="button" onClick={onTryDemo} className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-teal-500 hover:bg-teal-400 text-slate-900 font-bold text-sm transition-colors">
-              <PlayCircle className="w-4 h-4" />Run the live SAP demo
+              <PlayCircle className="w-4 h-4" />Reconcile your SAP files
             </button>
             <button type="button" onClick={onOpenConsultation} className="inline-flex items-center gap-2 px-5 py-3 rounded-full border border-white/20 hover:bg-white/10 font-semibold text-sm transition-colors">
               Book an SAP walkthrough<ArrowRight className="w-4 h-4 text-teal-400" />
@@ -76,6 +77,9 @@ export const SapReconFeature: React.FC<Props> = ({ onTryDemo, onOpenConsultation
             <p className="text-[11px] text-slate-500">Synthetic sample data in USD. Difference after adjustments: <span className="font-mono font-semibold">{money(r2(s.res.adjBank - s.res.adjBook))}</span></p>
           </div>
         </div>
+      </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <SapLivePlan onOpenConsultation={onOpenConsultation} />
       </div>
     </section>
   );

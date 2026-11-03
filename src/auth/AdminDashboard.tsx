@@ -5,6 +5,7 @@ import { useAccess } from './AccessProvider';
 import { downloadXlsx, LineChart, Bars, MiniTable, Label } from '../components/demos/kit';
 import { VisitorsPanel, VisitorRow, dur, place } from './VisitorsPanel';
 import { LeadsPanel, LeadRow } from './LeadsPanel';
+import { LicencesPanel } from './LicencesPanel';
 
 interface Dash {
   visitors: number; sessions: number; page_views: number; signups: number; paid: number; requests_new: number;
@@ -101,6 +102,7 @@ export const AdminDashboard: React.FC<{ onClose: () => void }> = ({ onClose }) =
     </div>
     <LeadsPanel rows={data.leads} />
     <VisitorsPanel rows={visitors} />
+    <LicencesPanel />
     <div className={card}>
       <div className="flex flex-wrap items-center justify-between gap-2 mb-2"><Label>Payments (Razorpay)</Label>
         <div className="flex gap-2 text-xs">{(['INR', 'USD'] as const).map(c => { const paid = pays.filter(x => x.status === 'paid' && x.currency === c); return <span key={c} className="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 font-semibold">{c === 'INR' ? '₹' : '$'}{(paid.reduce((t, x) => t + x.amount, 0) / 100).toLocaleString(c === 'INR' ? 'en-IN' : 'en-US')} · {paid.length} paid</span>; })}</div></div>

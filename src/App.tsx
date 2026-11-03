@@ -98,7 +98,7 @@ export default function App() {
 
         {/* 4a. SAP Bank Reconciliation feature */}
         <SapReconFeature
-          onTryDemo={() => openDemo('sap-bank-recon')}
+          onTryDemo={() => { window.location.href = '/sap-bank-reconciliation#reconcile'; }}
           onOpenConsultation={() => handleOpenConsultation('SAP Bank Reconciliation walkthrough')}
         />
 

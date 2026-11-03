@@ -15,8 +15,23 @@ const SEV: Record<ReconException['sev'], { bar: string; pill: string; label: str
 const amtCls = (n: number) => (n < 0 ? 'text-red-600' : 'text-emerald-700');
 
 async function readText(f: File) { return f.text(); }
+/** CSV/TXT with ';' (common in European SAP exports) is split here; other layouts go through readGrid. */
+async function gridOf(f: File) {
+  const ext = f.name.split('.').pop()?.toLowerCase() ?? '';
+  if (['csv', 'txt', 'tsv'].includes(ext)) {
+    const t = (await f.text()).replace(/\r/g, '');
+    const first = t.split('\n').find(l => l.trim()) ?? '';
+    if ((first.match(/;/g) || []).length > (first.match(/,/g) || []).length)
+      return { name: f.name, grid: t.split('\n').filter(l => l.trim()).map(l => l.split(';').map(c => c.trim().replace(/^"|"$/g, ''))) };
+  }
+  return readGrid(f);
+}
+/** The published sample files reproduce the built-in sample: running them never uses a free run. */
+const sum2 = (xs: { amt: number }[]) => Math.round(xs.reduce((a, x) => a + x.amt, 0) * 100);
+const isPublishedSample = (gl: GlItem[], bank: BankLine[]) =>
+  gl.length === SAMPLE.gl.length && bank.length === SAMPLE.bank.length && sum2(gl) === sum2(SAMPLE.gl) && sum2(bank) === sum2(SAMPLE.bank);
 
-export const SapReconDemo: React.FC<{ onOpenConsultation: () => void }> = ({ onOpenConsultation }) => {
+export const SapReconDemo: React.FC<{ onOpenConsultation: () => void; uploadOpen?: boolean }> = ({ onOpenConsultation, uploadOpen = false }) => {
   const { requestRun } = useAccess();
   const [data, setData] = useState<ReconData>(SAMPLE);
   const [files, setFiles] = useState<{ gl?: string; bank?: string }>({});
@@ -38,7 +53,7 @@ export const SapReconDemo: React.FC<{ onOpenConsultation: () => void }> = ({ onO
 
   const onGl = async (f?: File) => {
     if (!f) return; setErr('');
-    try { const g = await readGrid(f); const gl = parseGl(g.grid); setPending(p => ({ ...p, gl })); setFiles(x => ({ ...x, gl: `${f.name} · ${gl.length} items` })); }
+    try { const g = await gridOf(f); const gl = parseGl(g.grid); setPending(p => ({ ...p, gl })); setFiles(x => ({ ...x, gl: `${f.name} · ${gl.length} items` })); }
     catch (e) { setErr((e as Error).message); }
   };
   const onBank = async (f?: File) => {
@@ -51,7 +66,7 @@ export const SapReconDemo: React.FC<{ onOpenConsultation: () => void }> = ({ onO
         setPending(p => ({ ...p, bank: m.bank, opening: m.opening, closing: m.closing, statement: m.statement, account: m.account }));
         setFiles(x => ({ ...x, bank: `${f.name} · MT940 · ${m.bank.length} lines` }));
       } else {
-        const g = await readGrid(f); const bank = parseBankGrid(g.grid);
+        const g = await gridOf(f); const bank = parseBankGrid(g.grid);
         setPending(p => ({ ...p, bank, opening: undefined, closing: undefined })); setFiles(x => ({ ...x, bank: `${f.name} · ${bank.length} lines` }));
       }
     } catch (e) { setErr((e as Error).message); }
@@ -69,7 +84,7 @@ export const SapReconDemo: React.FC<{ onOpenConsultation: () => void }> = ({ onO
   const backToSample = () => { setData(SAMPLE); setPending({}); setFiles({}); setRes(null); reset(); setApproved(new Set()); };
 
   const run = async () => {
-    if (isSample) track('demo_run', 'sap-bank-recon');
+    if (isSample || isPublishedSample(data.gl, data.bank)) track('demo_run', 'sap-bank-recon');
     else if (!(await requestRun('ai-agents', { kind: 'sap-bank-recon', gl: data.gl.length, bank: data.bank.length }))) return;
     setBusy(true); setRes(null); reset(); setErr(''); setApproved(new Set()); setTab('exc');
     try {
@@ -179,7 +194,7 @@ export const SapReconDemo: React.FC<{ onOpenConsultation: () => void }> = ({ onO
             </div>
           </div>
 
-          <details className="rounded-2xl bg-white border border-dashed border-slate-300 p-3" open={!isSample}>
+          <details className="rounded-2xl bg-white border border-dashed border-slate-300 p-3" open={uploadOpen || !isSample}>
             <summary className="text-xs font-semibold text-slate-700 cursor-pointer">Try it with my SAP files</summary>
             <div className="mt-3 space-y-2">
               <SmallButton icon={Upload} onClick={() => glRef.current?.click()} className="!text-xs !py-2 w-full justify-center">{files.gl ?? 'FBL3N export (.xlsx / .csv)'}</SmallButton>

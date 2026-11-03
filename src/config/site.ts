@@ -28,7 +28,7 @@ export const siteConfig: SiteConfig = {
     { name: "Services", href: "#solutions" },
     { name: "Capabilities", href: "#what-we-automate" },
     { name: "Live Demo", href: "#capability-demos" },
-    { name: "SAP Recon", href: "#sap-bank-reconciliation" },
+    { name: "SAP Recon", href: "/sap-bank-reconciliation" },
     { name: "Before & After", href: "#before-after" },
     { name: "Use Cases", href: "#use-cases" },
     { name: "Process", href: "#how-it-works" },
